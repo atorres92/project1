@@ -4,5 +4,7 @@
     <string name="app_name">project1</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="startgame">Start Game</string>
+    <string name="title_activity_game">GameActivity</string>
 
 </resources>
