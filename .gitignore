@@ -27,3 +27,5 @@ proguard/
 *.ipr
 *.iws
 .idea/
+libs/android-support-v4.jar
+proguard-project.txt
