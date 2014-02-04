@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
 public class Game {
@@ -24,6 +26,28 @@ public class Game {
 			blockPiece.draw(canvas);
 		}
 		
+	}
+	
+	
+	public boolean onTouchEvent(View view, MotionEvent event){
+		
+		switch(event.getActionMasked()){
+		case MotionEvent.ACTION_DOWN:
+			//onTouched(event.getX(), event.getY());
+			return true;
+		case MotionEvent.ACTION_CANCEL:
+		case MotionEvent.ACTION_MOVE:
+			Log.i("onTouchEvent",  "ACTION_MOVE: " + event.getX() + "," + event.getY());
+			break;
+		case MotionEvent.ACTION_UP:
+			break;
+			
+		}
+		return false;
+	}
+	
+	private boolean onTouched(float x, float y){
+		return true;
 	}
 
 }
