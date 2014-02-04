@@ -6,15 +6,20 @@ import android.view.Menu;
 
 public class GameActivity extends Activity {
 
+	private BlockView blockView;
+	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	protected void onCreate(Bundle bundle) {
+		super.onCreate(bundle);
 		setContentView(R.layout.activity_game);
+		
+		
+		blockView = (BlockView)this.findViewById(R.id.blockView);
+	
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.game, menu);
 		return true;
 	}
