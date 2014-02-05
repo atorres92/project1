@@ -6,5 +6,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="startgame">Start Game</string>
     <string name="title_activity_game">GameActivity</string>
+    <string name="comfortablynumb">Comfortably Numb</string>
+    <string name="player2">Player 2:</string>
+    <string name="player1">Player 1:</string>
 
 </resources>
