@@ -9,19 +9,59 @@ import android.view.MotionEvent;
 import android.view.View;
 
 public class Game {
+	
+	private int gameSize;
 
 	public ArrayList<BlockPiece> blocks = new ArrayList<BlockPiece>();
 
 	private BlockView blockView;
+	/**
+	 * Pointer to the top most block
+	 */
+	private BlockPiece topBlock;
+	
+	/**
+	 * lost relative location of X
+	 */
+	private float lastRelX;
+	
+	/**
+	 * last relative location of Y
+	 */
+	
+	private int numBlocks;
+	
+	private float centerCanvas;
 
+	private Context gameContext;
+	
 	public Game(Context context, View view) {
 		blockView = (BlockView) view;
-
-		blocks.add(new BlockPiece(context, R.drawable.brick_barney));
-		blocks.add(new BlockPiece(context, R.drawable.brick_green1));
+		
+		gameContext = context;
+		addBlock(view);
+		
+		//blocks.add(new BlockPiece(context, R.drawable.brick_green1));
+		
+	}
+	
+	public void addBlock( View view){
+		blocks.add(new BlockPiece(gameContext, R.drawable.brick_barney, numBlocks, centerCanvas));
+		numBlocks+=1;
 	}
 
 	public void draw(Canvas canvas){
+		
+		
+		int wid = canvas.getWidth();
+		int hit = canvas.getHeight();
+		
+		centerCanvas = (float) (wid/4.0);
+		int minDim = wid <hit ? wid : hit;
+		
+		gameSize = minDim;
+		
+		
 		for(BlockPiece blockPiece : blocks){
 			blockPiece.draw(canvas);
 		}
@@ -31,22 +71,43 @@ public class Game {
 
 	public boolean onTouchEvent(View view, MotionEvent event){
 
+		float relX = event.getX();///gameSize;
+		float relY = event.getY();///gameSize;
+		
 		switch(event.getActionMasked()){
 		case MotionEvent.ACTION_DOWN:
-			//onTouched(event.getX(), event.getY());
-			return true;
+			return onTouched(event.getX(), event.getY());
+			//return true;
+		case MotionEvent.ACTION_UP:
+			return onReleased(view, relX, relY);
+			
+			
 		case MotionEvent.ACTION_CANCEL:
+			break;
 		case MotionEvent.ACTION_MOVE:
 			Log.i("onTouchEvent",  "ACTION_MOVE: " + event.getX() + "," + event.getY());
-			break;
-		case MotionEvent.ACTION_UP:
-			break;
+			topBlock.move(relX - lastRelX);
+			lastRelX = relX;
+			view.invalidate();
+			return true;
+			
+		
 
 		}
 		return false;
 	}
 
+	
+	private boolean onReleased(View view, float x, float y){
+		addBlock(view);
+		view.invalidate();
+
+		return true;
+	}
+	
 	private boolean onTouched(float x, float y){
+		topBlock = blocks.get(numBlocks-1);
+		lastRelX = topBlock.getX();
 		return true;
 	}
 

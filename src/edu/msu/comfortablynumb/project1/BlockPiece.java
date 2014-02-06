@@ -75,15 +75,25 @@ public class BlockPiece {
 
 
 
-	public BlockPiece(Context context, int id) {
+	public BlockPiece(Context context, int id, float dy, float center) {
 		this.id = id;
-
+		
+		this.x = center;
 		block = BitmapFactory.decodeResource(context.getResources(), id);
-
+		this.y = dy;
 	}
 
 	public void draw(Canvas canvas ){
+		
+		canvas.save();
+		int height = canvas.getHeight();
+		canvas.translate(x, height - (block.getHeight()*y));
 		canvas.drawBitmap(block, 0, 0,null);
+		canvas.restore();
+	}
+	
+	public void move(float dx){
+		x+=dx;
 	}
 
 }
