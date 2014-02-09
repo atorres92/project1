@@ -10,11 +10,29 @@ import android.view.View;
 public class BlockView extends View {
 
 	private Game game;
-	
+    private String playerOneName;
+    private String playerTwoName;
+
+    public String getPlayerOneName() {
+        return playerOneName;
+    }
+
+    public void setPlayerOneName(String playerOneName) {
+        this.playerOneName = playerOneName;
+    }
+
+    public String getPlayerTwoName() {
+        return playerTwoName;
+    }
+
+    public void setPlayerTwoName(String playerTwoName) {
+        this.playerTwoName = playerTwoName;
+    }
+
 	public BlockView(Context context) {
 		super(context);
 		init(context);
-			}
+	}
 
 	public BlockView(Context context, AttributeSet attrs) {
 		super(context, attrs);
