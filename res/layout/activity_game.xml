@@ -29,29 +29,32 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp" android:layout_weight="2" android:layout_gravity="center"
             android:gravity="center">
-        <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/onekg"
-                android:id="@+id/button"/>
-        <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/twokg"
-                android:id="@+id/button2" android:layout_alignParentTop="true" android:layout_toRightOf="@+id/button"/>
-        <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/fivekg"
-                android:id="@+id/button3"
-                android:layout_alignParentTop="true" android:layout_toRightOf="@+id/button2"/>
-        <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/tenkg"
-                android:id="@+id/button4" android:layout_gravity="right"
-                android:layout_alignBottom="@+id/button3" android:layout_toRightOf="@+id/button3"/>
 
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onWeightSelected"
+            android:text="@string/onekg" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/button"
+            android:onClick="onWeightSelected"
+            android:text="@string/twokg" />
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/button2"
+            android:onClick="onWeightSelected"
+            android:text="@string/fivekg" />
+        
         <Button
             android:id="@+id/endGame"
             android:layout_width="wrap_content"
@@ -62,6 +65,16 @@
             android:layout_toRightOf="@+id/button4"
             android:onClick="onEndGame"
             android:text="@string/endGame" />
+        
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/button3"
+            android:layout_gravity="right"
+            android:layout_toRightOf="@+id/button3"
+            android:onClick="onWeightSelected"
+            android:text="@string/tenkg" />
 
     </RelativeLayout>
 

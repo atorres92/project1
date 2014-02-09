@@ -1,12 +1,15 @@
 package edu.msu.comfortablynumb.project1;
 
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 public class GameActivity extends Activity {
 
@@ -57,6 +60,13 @@ public class GameActivity extends Activity {
         default:
             return super.onOptionsItemSelected(item);
         }
+	}
+	
+	public void onWeightSelected(View view){
+		
+		CharSequence weight = ((Button) view).getText();
+		blockView.forwardOnWeightSelected(weight);
+		
 	}
 
 	public void onEndGame(View view) {

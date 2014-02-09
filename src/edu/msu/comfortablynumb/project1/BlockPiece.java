@@ -34,6 +34,10 @@ public class BlockPiece {
 	 */
 	private float y;
 	/**
+	 * vertical scrolling
+	 */
+	private float scrollingOffset;
+	/**
 	 * weight
 	 */
 	private int weight;
@@ -73,17 +77,22 @@ public class BlockPiece {
 		this.weight = weight;
 	}
 
+	public int getWidth(){
+		return block.getWidth();
+	}
 
-
-	public BlockPiece(Context context, int id, float dy, float center) {
+	public BlockPiece(Context context, int id, float dy, float center, int weight) {
 		this.id = id;
-		
+		this.weight = weight;
 		this.x = center;
 		block = BitmapFactory.decodeResource(context.getResources(), id);
 		this.y = dy;
 	}
 
 	public void draw(Canvas canvas ){
+		canvas.save();
+		canvas.translate(0, scrollingOffset);
+		canvas.restore();
 		
 		canvas.save();
 		int height = canvas.getHeight();
@@ -92,8 +101,9 @@ public class BlockPiece {
 		canvas.restore();
 	}
 	
-	public void move(float dx){
-		x+=dx;
+	public void move(float dx, float dy){
+		x=dx;
+		scrollingOffset= dy;
 	}
 
 }

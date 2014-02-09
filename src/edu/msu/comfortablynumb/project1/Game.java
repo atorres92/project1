@@ -2,6 +2,7 @@ package edu.msu.comfortablynumb.project1;
 
 import java.util.ArrayList;
 
+import android.R.string;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.Log;
@@ -28,6 +29,7 @@ public class Game {
 	/**
 	 * last relative location of Y
 	 */
+	private float lastRelY;
 	
 	private int numBlocks;
 	
@@ -35,21 +37,46 @@ public class Game {
 
 	private Context gameContext;
 	
+	/**
+	 * last of last relY
+	 */
+	private float lastLastRelY;
+	
+	/**
+	 * saves the offset of the canvas
+	 */
+	private float offset;
+	
 	public Game(Context context, View view) {
 		blockView = (BlockView) view;
-		
+		lastLastRelY = 0;
 		gameContext = context;
-		addBlock(view);
+		addBlock(view, "1 kg");
 		
 		//blocks.add(new BlockPiece(context, R.drawable.brick_green1));
 		
 	}
 	
-	public void addBlock( View view){
-		blocks.add(new BlockPiece(gameContext, R.drawable.brick_barney, numBlocks, centerCanvas));
+	public void addBlock( View view, CharSequence weight){
+		int trueWeight = 0;
+		String stringWeight = weight.toString();
+		if(stringWeight.matches("1 kg"))
+			trueWeight = 1;
+		else if (stringWeight.matches("2 kg"))
+			trueWeight = 2;
+		else if(stringWeight.matches("5 kg"))
+			trueWeight = 5;
+		else 
+			trueWeight = 10;
+		
+		blocks.add(new BlockPiece(gameContext, R.drawable.brick_barney, numBlocks, centerCanvas, trueWeight));
+		//Log.i("addBlock", "true weight of " + trueWeight + "-" + weight.toString() + "-");
 		numBlocks+=1;
 	}
 
+	
+	
+	
 	public void draw(Canvas canvas){
 		
 		
@@ -61,13 +88,24 @@ public class Game {
 		
 		gameSize = minDim;
 		
+		canvas.save();
+	
+		if(lastLastRelY <lastRelY)
+			offset +=5;
+		else if (lastLastRelY > lastRelY)
+			offset -=5;
+			
+		
+		canvas.translate(0, offset);
+		
 		
 		for(BlockPiece blockPiece : blocks){
 			blockPiece.draw(canvas);
 		}
-
+		canvas.restore();
 	}
 
+	
 
 	public boolean onTouchEvent(View view, MotionEvent event){
 
@@ -86,8 +124,10 @@ public class Game {
 			break;
 		case MotionEvent.ACTION_MOVE:
 			Log.i("onTouchEvent",  "ACTION_MOVE: " + event.getX() + "," + event.getY());
-			topBlock.move(relX - lastRelX);
+			topBlock.move(relX - topBlock.getWidth()/2, relY); //- lastRelX);
+			lastLastRelY = lastRelY;
 			lastRelX = relX;
+			lastRelY = relY;
 			view.invalidate();
 			return true;
 			
@@ -99,7 +139,7 @@ public class Game {
 
 	
 	private boolean onReleased(View view, float x, float y){
-		addBlock(view);
+		//addBlock(view);
 		view.invalidate();
 
 		return true;
@@ -135,5 +175,6 @@ public class Game {
 
 		return centerOfMass;
 	}
+	
 
 }
