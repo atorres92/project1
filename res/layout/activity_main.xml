@@ -24,15 +24,14 @@
         <FrameLayout
             android:id="@+id/frameSpacer"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerInParent="true" android:paddingRight="100dp">
+            android:layout_height="0dp"
+            android:paddingRight="100dp" android:layout_centerVertical="true" android:layout_centerHorizontal="true">
 
         </FrameLayout>
 
         <EditText
             android:id="@+id/player1Input"
-            android:layout_width="200dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@id/frameSpacer"
             android:inputType="text"
@@ -40,7 +39,7 @@
 
         <EditText
             android:id="@+id/player2Input"
-            android:layout_width="200dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@id/frameSpacer"
             android:layout_below="@id/player1Input"
@@ -55,7 +54,7 @@
             android:layout_alignBottom="@+id/player2Input"
             android:layout_toLeftOf="@+id/frameSpacer"
             android:text="@string/player2"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium" android:textSize="15sp"/>
 
         <TextView
             android:id="@+id/player1Label"
@@ -65,7 +64,7 @@
             android:layout_alignBottom="@+id/player1Input"
             android:layout_alignLeft="@+id/player2Label"
             android:text="@string/player1"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium" android:textSize="15sp"/>
 
     </RelativeLayout>
 
