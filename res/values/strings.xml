@@ -9,5 +9,7 @@
     <string name="comfortablynumb">Comfortably Numb</string>
     <string name="player2">Player 2:</string>
     <string name="player1">Player 1:</string>
-
+    <string name="howtoplay">How to Play</string>
+	<string name="howtotext">Each player is assigned a brick color. Each player takes a turn placing a brick on top of the stack.  After the brick is released, if the brick stays, the other places takes a turn.  If the brick falls, the other player is awarded 1 point and the bricks are reset.  When a player reaches 5 points the game is over.</string>
+    <string name="stackerdescription">Stacker logo</string>
 </resources>
