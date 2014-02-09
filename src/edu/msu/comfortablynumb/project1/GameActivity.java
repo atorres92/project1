@@ -6,19 +6,20 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 public class GameActivity extends Activity {
 
 	private BlockView blockView;
-	
+
 	@Override
 	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 		setContentView(R.layout.activity_game);
-		
-		
+
+
 		blockView = (BlockView)this.findViewById(R.id.blockView);
-	
+
         Intent intent = this.getIntent();
         blockView.setPlayerOneName(intent.getStringExtra(MainActivity.PLAYER_ONE_NAME));
         blockView.setPlayerTwoName(intent.getStringExtra(MainActivity.PLAYER_TWO_NAME));
@@ -30,7 +31,7 @@ public class GameActivity extends Activity {
 		getMenuInflater().inflate(R.menu.game, menu);
 		return true;
 	}
-	
+
 	/**
 	 * Called when options button selected
 	 * @param item a menu item to use
@@ -52,10 +53,17 @@ public class GameActivity extends Activity {
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
             return true;
-            
+
         default:
             return super.onOptionsItemSelected(item);
         }
+	}
+
+	public void onEndGame(View view) {
+
+		Intent intent = new Intent(this, ScoreActivity.class);
+
+		startActivity(intent);
 	}
 
 }

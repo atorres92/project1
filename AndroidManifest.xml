@@ -26,6 +26,10 @@
             android:name="edu.msu.comfortablynumb.project1.GameActivity"
             android:label="@string/title_activity_game" >
         </activity>
+        <activity
+            android:name="edu.msu.comfortablynumb.project1.ScoreActivity"
+            android:label="@string/title_activity_score" >
+        </activity>
     </application>
 
 </manifest>

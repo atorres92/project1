@@ -20,13 +20,13 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-	
+
 	/**
 	 * Called when options button selected
 	 * @param item a menu item to use
@@ -48,12 +48,12 @@ public class MainActivity extends Activity {
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
             return true;
-            
+
         default:
             return super.onOptionsItemSelected(item);
         }
 	}
-	
+
 	public void onStartGame(View view) {
 		EditText playerOneText = (EditText) findViewById(R.id.player1Input);
 		EditText playerTwoText = (EditText) findViewById(R.id.player2Input);
@@ -68,5 +68,6 @@ public class MainActivity extends Activity {
 
 		startActivity(intent);
 	}
+
 
 }
