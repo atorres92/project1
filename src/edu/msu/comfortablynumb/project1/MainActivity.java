@@ -9,12 +9,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
 	static final String PLAYER_ONE_NAME = "PLAYER_ONE_NAME";
 	static final String PLAYER_TWO_NAME = "PLAYER_TWO_NAME";
-
+    static final String ENTER_PLAYER_NAME = "Please Enter Names";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -58,16 +59,21 @@ public class MainActivity extends Activity {
 		EditText playerOneText = (EditText) findViewById(R.id.player1Input);
 		EditText playerTwoText = (EditText) findViewById(R.id.player2Input);
 
-		String playerOneName = playerOneText.getText().toString();
-		String playerTwoName = playerTwoText.getText().toString();
+        if (playerOneText.getText().toString().matches("") || playerTwoText.getText().toString().matches("")) {
+            Toast.makeText(getApplicationContext(), ENTER_PLAYER_NAME,
+                    Toast.LENGTH_SHORT).show();
+        } else {
+            String playerOneName = playerOneText.getText().toString();
+            String playerTwoName = playerTwoText.getText().toString();
 
-		Intent intent = new Intent(this, GameActivity.class);
+            Intent intent = new Intent(this, GameActivity.class);
 
-		intent.putExtra(PLAYER_ONE_NAME, playerOneName);
-		intent.putExtra(PLAYER_TWO_NAME, playerTwoName);
+            intent.putExtra(PLAYER_ONE_NAME, playerOneName);
+            intent.putExtra(PLAYER_TWO_NAME, playerTwoName);
 
-		startActivity(intent);
-        finish();
+            startActivity(intent);
+            finish();
+        }
 	}
 
 

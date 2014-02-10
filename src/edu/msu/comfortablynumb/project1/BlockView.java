@@ -6,27 +6,20 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.TextView;
 
 public class BlockView extends View {
 
 	private Game game;
-    private String playerOneName;
-    private String playerTwoName;
+    private GameActivity gameActivity;
 
-    public String getPlayerOneName() {
-        return playerOneName;
+    public GameActivity getGameActivity() {
+        return gameActivity;
     }
 
-    public void setPlayerOneName(String playerOneName) {
-        this.playerOneName = playerOneName;
-    }
-
-    public String getPlayerTwoName() {
-        return playerTwoName;
-    }
-
-    public void setPlayerTwoName(String playerTwoName) {
-        this.playerTwoName = playerTwoName;
+    public void setGameActivity(GameActivity gameActivity) {
+        gameActivity = gameActivity;
+        game.setGameActivity(gameActivity);
     }
 
 	public BlockView(Context context) {

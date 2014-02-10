@@ -3,17 +3,20 @@ package edu.msu.comfortablynumb.project1;
 import java.util.ArrayList;
 
 import android.R.string;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.TextView;
 
 public class Game {
 	
 	private int gameSize;
 
-	public ArrayList<BlockPiece> blocks = new ArrayList<BlockPiece>();
+    private GameActivity gameActivity;
 
 	private BlockView blockView;
 	/**
@@ -31,6 +34,9 @@ public class Game {
 	 */
 	private float lastRelY;
 	
+    private int playerOneScore;
+    private int playerTwoScore;
+
 	private int numBlocks;
 	
 	private float centerCanvas;
@@ -47,14 +53,36 @@ public class Game {
 	 */
 	private float offset;
 	
+
+    public GameActivity getGameActivity() {
+        return gameActivity;
+    }
+
+    public void setGameActivity(GameActivity gameActivity) {
+        this.gameActivity = gameActivity;
+    }
+
+    public ArrayList<BlockPiece> blocks = new ArrayList<BlockPiece>();
+
+    public void updateScore() {
+        if (gameActivity != null) {
+            gameActivity.getPlayerOneScoreView().setText(gameActivity.getPlayerOneName() + ":" + playerOneScore);
+            gameActivity.getPlayerTwoScoreView().setText(gameActivity.getPlayerTwoName() + ":" + playerTwoScore);
+        }
+    }
+
 	public Game(Context context, View view) {
+        playerOneScore = 0;
+        playerTwoScore = 0;
+
 		blockView = (BlockView) view;
 		lastLastRelY = 0;
 		gameContext = context;
 		addBlock(view, "1 kg");
-		
-		//blocks.add(new BlockPiece(context, R.drawable.brick_green1));
-		
+
+        gameActivity = blockView.getGameActivity();
+        //blocks.add(new BlockPiece(context, R.drawable.brick_green1));
+
 	}
 	
 	public void addBlock( View view, CharSequence weight){
@@ -103,9 +131,8 @@ public class Game {
 			blockPiece.draw(canvas);
 		}
 		canvas.restore();
-	}
-
-	
+        updateScore();
+    }
 
 	public boolean onTouchEvent(View view, MotionEvent event){
 
@@ -140,6 +167,13 @@ public class Game {
 	
 	private boolean onReleased(View view, float x, float y){
 		//addBlock(view);
+
+        /* if player one's block falls:
+        playerTwoScore++;
+        updateScore();
+        ...
+         */
+		addBlock(view, "1kg");
 		view.invalidate();
 
 		return true;

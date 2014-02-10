@@ -11,13 +11,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="@string/playeronescoretext"
                 android:id="@+id/playerOneScore" android:paddingLeft="10dp" android:layout_gravity="center_vertical"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="@string/playertwoscoretext"
                 android:id="@+id/playerTwoScore" android:layout_gravity="center_vertical|right" android:paddingRight="10dp"/>
     </FrameLayout>
     <edu.msu.comfortablynumb.project1.BlockView
