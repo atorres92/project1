@@ -74,6 +74,7 @@ public class GameActivity extends Activity {
 		Intent intent = new Intent(this, ScoreActivity.class);
 
 		startActivity(intent);
+        finish();
 	}
 
 }

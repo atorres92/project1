@@ -67,6 +67,7 @@ public class MainActivity extends Activity {
 		intent.putExtra(PLAYER_TWO_NAME, playerTwoName);
 
 		startActivity(intent);
+        finish();
 	}
 
 
