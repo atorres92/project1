@@ -16,11 +16,18 @@ public class MainActivity extends Activity {
 	static final String PLAYER_ONE_NAME = "PLAYER_ONE_NAME";
 	static final String PLAYER_TWO_NAME = "PLAYER_TWO_NAME";
     static final String ENTER_PLAYER_NAME = "Please Enter Names";
+    static final String NAMES = "NAMES";
+    EditText playerOneText;
+    EditText playerTwoText;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-	}
+
+        playerOneText = (EditText) findViewById(R.id.player1Input);
+        playerTwoText = (EditText) findViewById(R.id.player2Input);
+    }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -56,9 +63,6 @@ public class MainActivity extends Activity {
 	}
 
 	public void onStartGame(View view) {
-		EditText playerOneText = (EditText) findViewById(R.id.player1Input);
-		EditText playerTwoText = (EditText) findViewById(R.id.player2Input);
-
         if (playerOneText.getText().toString().matches("") || playerTwoText.getText().toString().matches("")) {
             Toast.makeText(getApplicationContext(), ENTER_PLAYER_NAME,
                     Toast.LENGTH_SHORT).show();
@@ -76,5 +80,26 @@ public class MainActivity extends Activity {
         }
 	}
 
+    /**
+     * Save the names to a bundle
+     * @param bundle The bundle we save to
+     */
+    public void saveInstanceState(Bundle bundle) {
+        String [] names = new String[2];
+
+        names[0] = playerOneText.getText().toString();
+        names[1] = playerTwoText.getText().toString();
+        bundle.putStringArray(NAMES, names);
+    }
+
+    /**
+     * Read the names from a bundle
+     * @param bundle The bundle we save to
+     */
+    public void loadInstanceState(Bundle bundle) {
+        String [] names = bundle.getStringArray(NAMES);
+        playerOneText.setText(names[0]);
+        playerTwoText.setText(names[1]);
+    }
 
 }
