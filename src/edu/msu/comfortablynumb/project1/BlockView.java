@@ -3,22 +3,22 @@ package edu.msu.comfortablynumb.project1;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.TextView;
 
 public class BlockView extends View {
 
 	private Game game;
+	
+	private int turn;
     private GameActivity gameActivity;
 
     public GameActivity getGameActivity() {
         return gameActivity;
     }
 
-    public void setGameActivity(GameActivity gameActivity) {
-        gameActivity = gameActivity;
+    public void setGameActivity(GameActivity activity) {
+        gameActivity = activity;
         game.setGameActivity(gameActivity);
     }
 
@@ -41,6 +41,7 @@ public class BlockView extends View {
 	
 	private void init(Context context){
 		game = new Game(context, this.findViewById(R.id.blockView)) ;
+		turn = 1;
 	}
 
 	@Override
@@ -48,10 +49,6 @@ public class BlockView extends View {
 		super.onDraw(canvas);
 		
 		game.draw(canvas);
-		//Paint linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		//linePaint.setColor(0xff008000);
-		//linePaint.setStrokeWidth(3);
-		//canvas.drawLine(0,  0, 400, 100, linePaint);
 
 	}
 	
@@ -62,7 +59,11 @@ public class BlockView extends View {
 	
 	public void forwardOnWeightSelected(CharSequence weight){
 		
-		game.addBlock(this, weight);
+		game.addBlock(this, weight, turn);
+		if(turn==1)
+			turn = 0;
+		else
+			turn =1;
 	}
 	
 }

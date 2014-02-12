@@ -10,8 +10,6 @@ public class BlockPiece {
 
 	private int id;
 
-
-
 	public int getId() {
 		return id;
 	}
@@ -22,6 +20,8 @@ public class BlockPiece {
 		this.id = id;
 	}
 
+	public boolean placed;
+	
 	//the image of the block
 	private Bitmap block;
 
@@ -82,16 +82,17 @@ public class BlockPiece {
 	}
 
 	public BlockPiece(Context context, int id, float dy, float center, int weight) {
+		this.placed=false;
 		this.id = id;
 		this.weight = weight;
 		this.x = center;
 		block = BitmapFactory.decodeResource(context.getResources(), id);
-		this.y = dy;
+		this.y = dy+1;
 	}
 
 	public void draw(Canvas canvas ){
 		canvas.save();
-		canvas.translate(0, scrollingOffset);
+		//canvas.translate(0, scrollingOffset);
 		canvas.restore();
 		
 		canvas.save();
@@ -103,7 +104,7 @@ public class BlockPiece {
 	
 	public void move(float dx, float dy){
 		x=dx;
-		scrollingOffset= dy;
+		//scrollingOffset= dy;
 	}
 
 }

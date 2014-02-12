@@ -39,8 +39,6 @@ public class GameActivity extends Activity {
         playerOneScoreView = (TextView)this.findViewById(R.id.playerOneScore);
         playerTwoScoreView = (TextView)this.findViewById(R.id.playerTwoScore);
 
-        blockView = (BlockView)this.findViewById(R.id.blockView);
-
         //send activity to blockView so it can grab player names and scores
         blockView.setGameActivity(this);
     }

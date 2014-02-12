@@ -43,6 +43,11 @@ public class Game {
 
 	private Context gameContext;
 	
+	private float limitY = 100;
+	
+	private enum touchStates {horizontal, vertical, none};
+	private touchStates touchState = touchStates.none;
+	
 	/**
 	 * last of last relY
 	 */
@@ -78,14 +83,16 @@ public class Game {
 		blockView = (BlockView) view;
 		lastLastRelY = 0;
 		gameContext = context;
-		addBlock(view, "1 kg");
+		//addBlock(view, "1 kg", 1);
 
         gameActivity = blockView.getGameActivity();
         //blocks.add(new BlockPiece(context, R.drawable.brick_green1));
 
 	}
 	
-	public void addBlock( View view, CharSequence weight){
+	public void addBlock( View view, CharSequence weight, int player){
+		
+		touchState = touchStates.horizontal;
 		int trueWeight = 0;
 		String stringWeight = weight.toString();
 		if(stringWeight.matches("1 kg"))
@@ -97,9 +104,18 @@ public class Game {
 		else 
 			trueWeight = 10;
 		
+		if(player ==1){			
 		blocks.add(new BlockPiece(gameContext, R.drawable.brick_barney, numBlocks, centerCanvas, trueWeight));
-		//Log.i("addBlock", "true weight of " + trueWeight + "-" + weight.toString() + "-");
+		}
+		else{		
+		blocks.add(new BlockPiece(gameContext, R.drawable.brick_blue, numBlocks, centerCanvas, trueWeight));
+		}
+		//offset +=5;
 		numBlocks+=1;
+		topBlock = blocks.get(numBlocks-1);
+		lastRelX = topBlock.getX();
+		view.invalidate();
+		
 	}
 
 	
@@ -117,13 +133,16 @@ public class Game {
 		gameSize = minDim;
 		
 		canvas.save();
-	
-		if(lastLastRelY <lastRelY)
-			offset +=5;
-		else if (lastLastRelY > lastRelY)
-			offset -=5;
-			
 		
+		if(touchState == touchStates.vertical){
+		//	if(offset<hit){				
+				if(lastLastRelY <lastRelY)
+					offset +=5;
+				else if (lastLastRelY > lastRelY)
+					offset -=5;
+		//	}
+				
+		}
 		canvas.translate(0, offset);
 		
 		
@@ -141,8 +160,8 @@ public class Game {
 		
 		switch(event.getActionMasked()){
 		case MotionEvent.ACTION_DOWN:
-			return onTouched(event.getX(), event.getY());
-			//return true;
+			//return onTouched(event.getX(), event.getY());
+			return true;
 		case MotionEvent.ACTION_UP:
 			return onReleased(view, relX, relY);
 			
@@ -151,38 +170,61 @@ public class Game {
 			break;
 		case MotionEvent.ACTION_MOVE:
 			Log.i("onTouchEvent",  "ACTION_MOVE: " + event.getX() + "," + event.getY());
-			topBlock.move(relX - topBlock.getWidth()/2, relY); //- lastRelX);
-			lastLastRelY = lastRelY;
-			lastRelX = relX;
-			lastRelY = relY;
-			view.invalidate();
-			return true;
-			
+			if(touchState == touchStates.horizontal){
+				if(topBlock!=null){
+				topBlock.move(relX - topBlock.getWidth()/2, relY); //- lastRelX);
+				lastRelX = relX;
+				view.invalidate();
+				}
+				return true;
+			}
+			else if (touchState == touchStates.vertical){
+				lastLastRelY = lastRelY;			
+				lastRelY = relY;
+				view.invalidate();
+				return true;
+			}
+			else
+				return true;
 		
-
 		}
 		return false;
 	}
 
 	
 	private boolean onReleased(View view, float x, float y){
-		//addBlock(view);
 
         /* if player one's block falls:
         playerTwoScore++;
         updateScore();
         ...
          */
-		addBlock(view, "1kg");
+		if(topBlock!=null){
+			topBlock.placed=true;
+		}
 		view.invalidate();
-
+		
+		if(touchState == touchStates.horizontal)
+			touchState = touchStates.vertical;
+		else if (touchState == touchStates.vertical)
+			touchState = touchStates.none;
+		else
+			;
+		
 		return true;
 	}
 	
 	private boolean onTouched(float x, float y){
-		topBlock = blocks.get(numBlocks-1);
-		lastRelX = topBlock.getX();
-		return true;
+		if(blocks.size() >0){
+			topBlock = blocks.get(numBlocks-1);
+//			if(topBlock.placed){
+//				topBlock=null;
+//				return false;
+//			}
+			lastRelX = topBlock.getX();
+			return true;
+		}
+		return false;
 	}
 
 	/*returns float array of center of mass:
