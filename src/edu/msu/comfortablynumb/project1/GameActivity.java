@@ -28,6 +28,7 @@ public class GameActivity extends Activity {
 	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 		setContentView(R.layout.activity_game);
+        setTitle("Comfortably Numb");
 
 
 		blockView = (BlockView)this.findViewById(R.id.blockView);
@@ -98,6 +99,14 @@ public class GameActivity extends Activity {
             case playertwo:
                 playerTwoScoreView.setText( playerTwoName + ":" + score );
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent setIntent = new Intent(Intent.ACTION_MAIN);
+        setIntent.addCategory(Intent.CATEGORY_HOME);
+        setIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(setIntent);
     }
 
     public TextView getPlayerOneScoreView() {

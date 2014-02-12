@@ -67,6 +67,7 @@ public class Game {
         this.gameActivity = gameActivity;
     }
 
+    //Our block pieces are stored in this array
     public ArrayList<BlockPiece> blocks = new ArrayList<BlockPiece>();
 
     public void updateScore() {
