@@ -13,8 +13,6 @@ import android.view.View;
 import android.widget.TextView;
 
 public class Game {
-	
-	private int gameSize;
 
     private GameActivity gameActivity;
 
@@ -37,15 +35,25 @@ public class Game {
     private int playerOneScore;
     private int playerTwoScore;
 
+    /**
+     * number of blocks in play
+     */
 	private int numBlocks;
-	
+	/**
+	 * returns center position of canvas for block positioning 
+	 */
 	private float centerCanvas;
 
 	private Context gameContext;
 	
-	private float limitY = 100;
-	
+	/**
+	 * the possible touch states the game can be in.
+	 * @author keyurpatel
+	 */
 	private enum touchStates {horizontal, vertical, none};
+	/**
+	 * the starting game state
+	 */
 	private touchStates touchState = touchStates.none;
 	
 	/**
@@ -54,7 +62,7 @@ public class Game {
 	private float lastLastRelY;
 	
 	/**
-	 * saves the offset of the canvas
+	 * saves the offset of the canvas used for vertical scrolling
 	 */
 	private float offset;
 	
@@ -80,19 +88,15 @@ public class Game {
 	public Game(Context context, View view) {
         playerOneScore = 0;
         playerTwoScore = 0;
-
 		blockView = (BlockView) view;
 		lastLastRelY = 0;
 		gameContext = context;
-		//addBlock(view, "1 kg", 1);
-
         gameActivity = blockView.getGameActivity();
-        //blocks.add(new BlockPiece(context, R.drawable.brick_green1));
 
 	}
 	
 	public void addBlock( View view, CharSequence weight, int player){
-		
+		//sets the touch state to horizontal so the block piece can be moved horizontally 
 		touchState = touchStates.horizontal;
 		int trueWeight = 0;
 		String stringWeight = weight.toString();
@@ -105,13 +109,13 @@ public class Game {
 		else 
 			trueWeight = 10;
 		
+		//draws the block a certain color depending on the player
 		if(player ==1){			
-		blocks.add(new BlockPiece(gameContext, R.drawable.brick_barney, numBlocks, centerCanvas, trueWeight));
+		blocks.add(new BlockPiece(gameContext, R.drawable.brick_red1, numBlocks, centerCanvas, trueWeight));
 		}
 		else{		
 		blocks.add(new BlockPiece(gameContext, R.drawable.brick_blue, numBlocks, centerCanvas, trueWeight));
 		}
-		//offset +=5;
 		numBlocks+=1;
 		topBlock = blocks.get(numBlocks-1);
 		lastRelX = topBlock.getX();
@@ -123,57 +127,48 @@ public class Game {
 	
 	
 	public void draw(Canvas canvas){
-		
-		
-		int wid = canvas.getWidth();
-		int hit = canvas.getHeight();
-		
+				
+		int wid = canvas.getWidth();	
 		centerCanvas = (float) (wid/4.0);
-		int minDim = wid <hit ? wid : hit;
-		
-		gameSize = minDim;
 		
 		canvas.save();
 		
-		if(touchState == touchStates.vertical){
-		//	if(offset<hit){				
-				if(lastLastRelY <lastRelY)
-					offset +=5;
-				else if (lastLastRelY > lastRelY)
-					offset -=5;
-		//	}
-				
+		//allows for vertical scrolling.
+		if(touchState == touchStates.vertical){				
+			if(lastLastRelY <lastRelY )
+				offset +=5;
+			else if (lastLastRelY > lastRelY &&  offset >=0)
+				offset -=5;		
 		}
 		canvas.translate(0, offset);
 		
-		
+		//draws the block pieces
 		for(BlockPiece blockPiece : blocks){
 			blockPiece.draw(canvas);
 		}
+		
 		canvas.restore();
         updateScore();
     }
 
 	public boolean onTouchEvent(View view, MotionEvent event){
 
-		float relX = event.getX();///gameSize;
-		float relY = event.getY();///gameSize;
+		float relX = event.getX();
+		float relY = event.getY();
 		
 		switch(event.getActionMasked()){
 		case MotionEvent.ACTION_DOWN:
-			//return onTouched(event.getX(), event.getY());
 			return true;
 		case MotionEvent.ACTION_UP:
-			return onReleased(view, relX, relY);
-			
-			
+			return onReleased(view, relX, relY);	
 		case MotionEvent.ACTION_CANCEL:
 			break;
 		case MotionEvent.ACTION_MOVE:
-			Log.i("onTouchEvent",  "ACTION_MOVE: " + event.getX() + "," + event.getY());
+			//stores relevant information depending on the touch state
+			//Log.i("onTouchEvent",  "ACTION_MOVE: " + event.getX() + "," + event.getY());
 			if(touchState == touchStates.horizontal){
 				if(topBlock!=null){
-				topBlock.move(relX - topBlock.getWidth()/2, relY); //- lastRelX);
+				topBlock.move(relX - topBlock.getWidth()/2, relY); 
 				lastRelX = relX;
 				view.invalidate();
 				}
@@ -192,7 +187,6 @@ public class Game {
 		return false;
 	}
 
-	
 	private boolean onReleased(View view, float x, float y){
 
         /* if player one's block falls:
@@ -205,28 +199,16 @@ public class Game {
 		}
 		view.invalidate();
 		
+		//Change the touch state so as soon as the player lets go the block cannot be shifted 
 		if(touchState == touchStates.horizontal)
 			touchState = touchStates.vertical;
 		else if (touchState == touchStates.vertical)
-			touchState = touchStates.none;
-		else
 			;
-		
+		else
+			;	
 		return true;
 	}
 	
-	private boolean onTouched(float x, float y){
-		if(blocks.size() >0){
-			topBlock = blocks.get(numBlocks-1);
-//			if(topBlock.placed){
-//				topBlock=null;
-//				return false;
-//			}
-			lastRelX = topBlock.getX();
-			return true;
-		}
-		return false;
-	}
 
 	/*returns float array of center of mass:
 	 * value[0] = X

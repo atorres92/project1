@@ -34,10 +34,6 @@ public class BlockPiece {
 	 */
 	private float y;
 	/**
-	 * vertical scrolling
-	 */
-	private float scrollingOffset;
-	/**
 	 * weight
 	 */
 	private int weight;
@@ -92,7 +88,6 @@ public class BlockPiece {
 
 	public void draw(Canvas canvas ){
 		canvas.save();
-		//canvas.translate(0, scrollingOffset);
 		canvas.restore();
 		
 		canvas.save();
@@ -104,7 +99,6 @@ public class BlockPiece {
 	
 	public void move(float dx, float dy){
 		x=dx;
-		//scrollingOffset= dy;
 	}
 
 }

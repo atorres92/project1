@@ -1,0 +1,39 @@
+
+Project 1 Submission
+
+Group Name:   Comfortably Numb
+
+When you have completed the project, complete the following form and include it with your project. Include this file as a text file in the folder with your project when you turn it in. 
+
+Names of all classes responsible for storing the stack of bricks: Game has an array that stores the blocks, there’s also a function in Game that adds blocks.  Each block is added when a user clicks a weight button in GameActivity.
+
+
+
+Member 1: Aaron Torres
+
+Responsibility: 
+
+Activities, help, and game sequencing
+-Did layouts for MainActivity and GameActivity, did help menu, handled updating of scores for players and showing players names
+
+
+Member 2: Keyur Patel
+
+Responsibility:
+The brick view control - placing bricks and scrolling.
+- Scrolling vertically and placing bricks.  Added brick movements, horizontal scrolling of bricks.
+
+
+Member 3: Anthony Russel
+
+Responsibility:
+Brick stability testing and falling behavior.
+- Made center of mass calculator, created ScoreActivity and did layout for score activity.   Created logo for each screen density and ic_launcher logo for top left corner icon
+
+
+
+Member 4 (if applicable): 
+
+Responsibility:
+
+
