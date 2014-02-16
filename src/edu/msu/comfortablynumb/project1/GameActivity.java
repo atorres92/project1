@@ -76,12 +76,12 @@ public class GameActivity extends Activity {
             return super.onOptionsItemSelected(item);
         }
 	}
-	
+
 	public void onWeightSelected(View view){
-		
+
 		CharSequence weight = ((Button) view).getText();
 		blockView.forwardOnWeightSelected(weight);
-		
+
 	}
 
 	public void onEndGame(View view) {

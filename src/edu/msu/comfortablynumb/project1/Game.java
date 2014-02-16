@@ -21,17 +21,17 @@ public class Game {
 	 * Pointer to the top most block
 	 */
 	private BlockPiece topBlock;
-	
+
 	/**
 	 * lost relative location of X
 	 */
 	private float lastRelX;
-	
+
 	/**
 	 * last relative location of Y
 	 */
 	private float lastRelY;
-	
+
     private int playerOneScore;
     private int playerTwoScore;
 
@@ -40,12 +40,12 @@ public class Game {
      */
 	private int numBlocks;
 	/**
-	 * returns center position of canvas for block positioning 
+	 * returns center position of canvas for block positioning
 	 */
 	private float centerCanvas;
 
 	private Context gameContext;
-	
+
 	/**
 	 * the possible touch states the game can be in.
 	 * @author keyurpatel
@@ -55,17 +55,17 @@ public class Game {
 	 * the starting game state
 	 */
 	private touchStates touchState = touchStates.none;
-	
+
 	/**
 	 * last of last relY
 	 */
 	private float lastLastRelY;
-	
+
 	/**
 	 * saves the offset of the canvas used for vertical scrolling
 	 */
 	private float offset;
-	
+
 
     public GameActivity getGameActivity() {
         return gameActivity;
@@ -94,9 +94,9 @@ public class Game {
         gameActivity = blockView.getGameActivity();
 
 	}
-	
+
 	public void addBlock( View view, CharSequence weight, int player){
-		//sets the touch state to horizontal so the block piece can be moved horizontally 
+		//sets the touch state to horizontal so the block piece can be moved horizontally
 		touchState = touchStates.horizontal;
 		int trueWeight = 0;
 		String stringWeight = weight.toString();
@@ -106,55 +106,55 @@ public class Game {
 			trueWeight = 2;
 		else if(stringWeight.matches("5 kg"))
 			trueWeight = 5;
-		else 
+		else
 			trueWeight = 10;
-		
+
 		//draws the block a certain color depending on the player
-		if(player ==1){			
+		if(player ==1){
 		blocks.add(new BlockPiece(gameContext, R.drawable.brick_red1, numBlocks, centerCanvas, trueWeight));
 		}
-		else{		
+		else{
 		blocks.add(new BlockPiece(gameContext, R.drawable.brick_blue, numBlocks, centerCanvas, trueWeight));
 		}
 		numBlocks+=1;
 		topBlock = blocks.get(numBlocks-1);
 		lastRelX = topBlock.getX();
 		view.invalidate();
-		
+
 	}
 
-	
-	
-	
+
+
+
 	public void draw(Canvas canvas){
-				
+
 		int wid = canvas.getWidth();
 		int hit = canvas.getHeight();
-		
+
 		int minDim = wid < hit ? wid : hit;
-		
+
 		if( wid == minDim)
-			centerCanvas =  (float) ((float) wid/2.0); 
+			centerCanvas =  (float) ((float) wid/2.0);
 		else
 			centerCanvas = (float) ((float) wid/2.0) ;
-		
+
 		Log.i("draw", " " +wid + "center " + centerCanvas);
 		canvas.save();
-		
+
 		//allows for vertical scrolling.
-		if(touchState == touchStates.vertical){				
+		if(touchState == touchStates.vertical){
 			if(lastLastRelY <lastRelY )
 				offset +=5;
 			else if (lastLastRelY > lastRelY &&  offset >=0)
-				offset -=5;		
+				offset -=5;
 		}
 		canvas.translate(0, offset);
-		
+
 		//draws the block pieces
 		for(BlockPiece blockPiece : blocks){
 			blockPiece.draw(canvas);
 		}
-		
+
 		canvas.restore();
         updateScore();
     }
@@ -163,12 +163,12 @@ public class Game {
 
 		float relX = event.getX();
 		float relY = event.getY();
-		
+
 		switch(event.getActionMasked()){
 		case MotionEvent.ACTION_DOWN:
 			return true;
 		case MotionEvent.ACTION_UP:
-			return onReleased(view, relX, relY);	
+			return onReleased(view, relX, relY);
 		case MotionEvent.ACTION_CANCEL:
 			break;
 		case MotionEvent.ACTION_MOVE:
@@ -176,21 +176,21 @@ public class Game {
 			//Log.i("onTouchEvent",  "ACTION_MOVE: " + event.getX() + "," + event.getY());
 			if(touchState == touchStates.horizontal){
 				if(topBlock!=null){
-				topBlock.move(relX - topBlock.getWidth()/2, relY); 
+				topBlock.move(relX - topBlock.getWidth()/2, relY);
 				lastRelX = relX;
 				view.invalidate();
 				}
 				return true;
 			}
 			else if (touchState == touchStates.vertical){
-				lastLastRelY = lastRelY;			
+				lastLastRelY = lastRelY;
 				lastRelY = relY;
 				view.invalidate();
 				return true;
 			}
 			else
 				return true;
-		
+
 		}
 		return false;
 	}
@@ -206,42 +206,65 @@ public class Game {
 			topBlock.placed=true;
 		}
 		view.invalidate();
-		
-		//Change the touch state so as soon as the player lets go the block cannot be shifted 
-		if(touchState == touchStates.horizontal)
+
+		//Change the touch state so as soon as the player lets go the block cannot be shifted
+		if(touchState == touchStates.horizontal){
 			touchState = touchStates.vertical;
+			calculateCenterOfMass();
+		}
 		else if (touchState == touchStates.vertical)
 			;
 		else
-			;	
+			;
 		return true;
 	}
-	
 
-	/*returns float array of center of mass:
-	 * value[0] = X
-	 * value[1] = Y
+
+	/* Returns the position of the block that the stack is falling over
+	 * A return of -1 means that nothing is falling
 	 */
-	private float[] calculateCenterOfMass(){
+	private int calculateCenterOfMass(){
 
-		//Sum up the blocks to find center of mass
-		float[] centerOfMass = new float[2];
-		int sumMass = 0;
-		float sumX = 0;
-		float sumY = 0;
+		if(blocks.size() <= 1)
+			return -1;
 
-		//Remember to remove the first one from calculation later
-		for (BlockPiece b : blocks){
-	        sumMass = sumMass + b.getWeight();
-	        sumX = ((float)b.getWeight()) * b.getX();
-	        sumY = ((float)b.getWeight()) * b.getY();
+		for(int i = 0; i < blocks.size()-1; i++)
+		{
+			//Sum up the blocks to find center of mass
+			float[] centerOfMass = new float[2];
+			int sumMass = 0;
+			float sumX = 0;
+			float sumY = 0;
 
-	     }
-		centerOfMass[0] = (float) (1.0 / ((float)sumMass) *sumX);
-		centerOfMass[1] = (float) (1.0 / ((float)sumMass) *sumY);
+			//Remember to remove the first one from calculation later
+			for (int j = i+1; j < blocks.size(); j++){
+				BlockPiece b = blocks.get(j);
+		        sumMass = sumMass + b.getWeight();
+		        sumX = sumX + ((float)b.getWeight()) * b.getX();
+		        sumY = sumY + ((float)b.getWeight()) * b.getY();
 
-		return centerOfMass;
+		     }
+			centerOfMass[0] = (float) (1.0 / ((float)sumMass) *sumX);
+			centerOfMass[1] = (float) (1.0 / ((float)sumMass) *sumY);
+
+			Log.i("Block Position", "Top Block pos: " + topBlock.getX());
+
+			BlockPiece bottom = blocks.get(i);
+			if(bottom.getX() - (bottom.getWidth()/2) < centerOfMass[0] && (bottom.getX() + (bottom.getWidth()/2))  >  centerOfMass[0] ){
+			}
+
+			else{
+				Log.i("falling", "Fallling at block: " + i);
+				return i;
+			}
+
+		}
+
+
+
+		Log.i("standing", "Still Standing");
+		return -1;
 	}
-	
+
 
 }
