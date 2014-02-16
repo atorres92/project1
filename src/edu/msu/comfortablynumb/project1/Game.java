@@ -128,9 +128,17 @@ public class Game {
 	
 	public void draw(Canvas canvas){
 				
-		int wid = canvas.getWidth();	
-		centerCanvas = (float) (wid/4.0);
+		int wid = canvas.getWidth();
+		int hit = canvas.getHeight();
 		
+		int minDim = wid < hit ? wid : hit;
+		
+		if( wid == minDim)
+			centerCanvas =  (float) ((float) wid/2.0); 
+		else
+			centerCanvas = (float) ((float) wid/2.0) ;
+		
+		Log.i("draw", " " +wid + "center " + centerCanvas);
 		canvas.save();
 		
 		//allows for vertical scrolling.

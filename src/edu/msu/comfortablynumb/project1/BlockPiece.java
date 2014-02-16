@@ -30,7 +30,7 @@ public class BlockPiece {
 	 */
 	private float x;
 	/**
-	 * y location
+	 * saves how much to offset the 7 given the # of blocks
 	 */
 	private float y;
 	/**
@@ -80,9 +80,9 @@ public class BlockPiece {
 	public BlockPiece(Context context, int id, float dy, float center, int weight) {
 		this.placed=false;
 		this.id = id;
-		this.weight = weight;
-		this.x = center;
+		this.weight = weight;		
 		block = BitmapFactory.decodeResource(context.getResources(), id);
+		this.x = center - (float) block.getWidth()/2;
 		this.y = dy+1;
 	}
 
