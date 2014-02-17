@@ -11,6 +11,9 @@ import java.util.ArrayList;
 
 public class Game {
 
+	private final float TURN_TIME = 10000;
+	private final float FALL_TIME = 9000;
+
     private GameActivity gameActivity;
 
 	private BlockView blockView;
@@ -32,6 +35,16 @@ public class Game {
     private int playerOneScore;
     private int playerTwoScore;
 
+	/**
+	 * Holds the startTime of the fall
+	 */
+	private long fallingStartTime;
+
+	/**
+	 * Brick
+	 */
+	private int turningBlock;
+
     /**
      * number of blocks in play
      */
@@ -52,7 +65,17 @@ public class Game {
 	 * the starting game state
 	 */
 	private touchStates touchState;
-	
+
+	/**
+	 * the possible states of the stack
+	 */
+	private enum stackStates {standing, fallingLeft, fallingRight, fallen};
+	/**
+	 * the starting stack state
+	 */
+	private stackStates stackState;
+
+
 	/**
 	 * last of last relY
 	 */
@@ -101,12 +124,15 @@ public class Game {
 		blockView = (BlockView) view;
 		lastLastRelY = 0;
 		gameContext = context;
+		stackState = stackStates.standing;
         gameActivity = blockView.getGameActivity();
+        turningBlock = 0;
+        fallingStartTime = 0;
 
 	}
 
 	public void addBlock( View view, int weight, int player){
-		//sets the touch state to horizontal so the block piece can be moved horizontally 
+		//sets the touch state to horizontal so the block piece can be moved horizontally
 		touchState = touchStates.horizontal;
 
 		//draws the block a certain color depending on the player
@@ -146,6 +172,21 @@ public class Game {
 				offset -=5;
 		}
 		canvas.translate(0, offset);
+
+		if((stackState == stackStates.fallingLeft || stackState == stackStates.fallingRight) && fallingStartTime == 0 )
+			fallingStartTime = System.currentTimeMillis();
+
+
+		long currentTime = System.currentTimeMillis();
+
+		if(stackState == stackStates.fallingLeft || stackState == stackStates.fallingRight){
+			if((currentTime-fallingStartTime) < TURN_TIME){
+				for(int i = turningBlock +1 ; i < blocks.size(); i++){
+					blocks.get(i).setRotation((((float)(currentTime-fallingStartTime))/TURN_TIME) * 90);
+				}
+
+			}
+		}
 
 		//draws the block pieces
 		for(BlockPiece blockPiece : blocks){
@@ -207,7 +248,7 @@ public class Game {
 		//Change the touch state so as soon as the player lets go the block cannot be shifted
 		if(touchState == touchStates.horizontal){
 			touchState = touchStates.vertical;
-			calculateCenterOfMass();
+			turningBlock = calculateCenterOfMass();
 		}
 		else if (touchState == touchStates.vertical)
 			;
@@ -250,8 +291,14 @@ public class Game {
 			if(bottom.getX() - (bottom.getWidth()/2) < centerOfMass[0] && (bottom.getX() + (bottom.getWidth()/2))  >  centerOfMass[0] ){
 			}
 
+			else if (bottom.getX() - (bottom.getWidth()/2) >= centerOfMass[0]){
+				Log.i("falling", "Fallling at block: " + i);
+				stackState = stackStates.fallingLeft;
+				return i;
+			}
 			else{
 				Log.i("falling", "Fallling at block: " + i);
+				stackState = stackStates.fallingRight;
 				return i;
 			}
 
@@ -300,7 +347,7 @@ public class Game {
         int [] ids = bundle.getIntArray(IDS);
         int [] scores = bundle.getIntArray(SCORES);
         int [] weights = bundle.getIntArray(WEIGHTS);
-        
+
         playerOneScore = scores[PLAYER_ONE];
         playerTwoScore = scores[PLAYER_TWO];
 

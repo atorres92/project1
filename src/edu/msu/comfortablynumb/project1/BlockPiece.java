@@ -21,7 +21,7 @@ public class BlockPiece {
 	}
 
 	public boolean placed;
-	
+
 	//the image of the block
 	private Bitmap block;
 
@@ -37,7 +37,19 @@ public class BlockPiece {
 	 * weight
 	 */
 	private int weight;
+	/**
+	 * rotation
+	 */
+	private float rotation;
 
+
+	public float getRotation() {
+		return rotation;
+	}
+
+	public void setRotation(float rotation) {
+		this.rotation = rotation;
+	}
 
 	public float getX() {
 		return x;
@@ -80,23 +92,25 @@ public class BlockPiece {
 	public BlockPiece(Context context, int id, float dy, float center, int weight) {
 		this.placed=false;
 		this.id = id;
-		this.weight = weight;		
+		this.weight = weight;
 		block = BitmapFactory.decodeResource(context.getResources(), id);
 		this.x = center - (float) block.getWidth()/2;
 		this.y = dy+1;
+		this.rotation = 0f;
 	}
 
 	public void draw(Canvas canvas ){
 		canvas.save();
 		canvas.restore();
-		
+
 		canvas.save();
 		int height = canvas.getHeight();
 		canvas.translate(x, height - (block.getHeight()*y));
+		canvas.rotate(rotation);
 		canvas.drawBitmap(block, 0, 0,null);
 		canvas.restore();
 	}
-	
+
 	public void move(float dx, float dy){
 		x=dx;
 	}
