@@ -1,16 +1,13 @@
 package edu.msu.comfortablynumb.project1;
 
-import java.util.ArrayList;
-
-import android.R.string;
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Canvas;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.TextView;
+
+import java.util.ArrayList;
 
 public class Game {
 
@@ -54,8 +51,8 @@ public class Game {
 	/**
 	 * the starting game state
 	 */
-	private touchStates touchState = touchStates.none;
-
+	private touchStates touchState;
+	
 	/**
 	 * last of last relY
 	 */
@@ -66,6 +63,17 @@ public class Game {
 	 */
 	private float offset;
 
+    /**
+     * The name of the bundle keys to save the Game
+     */
+    private final static String LOCATIONS = "Game.locations";
+    private final static String IDS = "Game.ids";
+    private final static String WEIGHTS = "Game.weights";
+    private final static String SCORES = "Game.scores";
+    private final static String TOUCHSTATE = "Game.touchstate";
+    private final static int PLAYERS = 2;
+    private final static int PLAYER_ONE = 0;
+    private final static int PLAYER_TWO = 1;
 
     public GameActivity getGameActivity() {
         return gameActivity;
@@ -76,7 +84,7 @@ public class Game {
     }
 
     //Our block pieces are stored in this array
-    public ArrayList<BlockPiece> blocks = new ArrayList<BlockPiece>();
+    public ArrayList<BlockPiece> blocks;
 
     public void updateScore() {
         if (gameActivity != null) {
@@ -86,6 +94,8 @@ public class Game {
     }
 
 	public Game(Context context, View view) {
+        blocks = new ArrayList<BlockPiece>();
+        touchState = touchStates.none;
         playerOneScore = 0;
         playerTwoScore = 0;
 		blockView = (BlockView) view;
@@ -95,26 +105,16 @@ public class Game {
 
 	}
 
-	public void addBlock( View view, CharSequence weight, int player){
-		//sets the touch state to horizontal so the block piece can be moved horizontally
+	public void addBlock( View view, int weight, int player){
+		//sets the touch state to horizontal so the block piece can be moved horizontally 
 		touchState = touchStates.horizontal;
-		int trueWeight = 0;
-		String stringWeight = weight.toString();
-		if(stringWeight.matches("1 kg"))
-			trueWeight = 1;
-		else if (stringWeight.matches("2 kg"))
-			trueWeight = 2;
-		else if(stringWeight.matches("5 kg"))
-			trueWeight = 5;
-		else
-			trueWeight = 10;
 
 		//draws the block a certain color depending on the player
 		if(player ==1){
-		blocks.add(new BlockPiece(gameContext, R.drawable.brick_red1, numBlocks, centerCanvas, trueWeight));
+		blocks.add(new BlockPiece(gameContext, R.drawable.brick_red1, numBlocks, centerCanvas, weight));
 		}
 		else{
-		blocks.add(new BlockPiece(gameContext, R.drawable.brick_blue, numBlocks, centerCanvas, trueWeight));
+		blocks.add(new BlockPiece(gameContext, R.drawable.brick_blue, numBlocks, centerCanvas, weight));
 		}
 		numBlocks+=1;
 		topBlock = blocks.get(numBlocks-1);
@@ -122,9 +122,6 @@ public class Game {
 		view.invalidate();
 
 	}
-
-
-
 
 	public void draw(Canvas canvas){
 
@@ -138,7 +135,7 @@ public class Game {
 		else
 			centerCanvas = (float) ((float) wid/2.0) ;
 
-		Log.i("draw", " " +wid + "center " + centerCanvas);
+		Log.i("draw", " " + wid + "center " + centerCanvas);
 		canvas.save();
 
 		//allows for vertical scrolling.
@@ -266,5 +263,74 @@ public class Game {
 		return -1;
 	}
 
+    /**
+     * Save the Game to a bundle
+     * @param bundle The bundle we save to
+     */
+    public void saveInstanceState(Bundle bundle) {
+        float [] locations = new float[blocks.size() * 2];
+        int [] ids = new int[blocks.size()];
+        int [] scores = new int[PLAYERS];
+        int [] weights = new int[blocks.size()];
 
+        for(int i=0;  i<blocks.size(); i++) {
+            BlockPiece piece = blocks.get(i);
+            locations[i*2] = piece.getX();
+            locations[i*2+1] = piece.getY();
+            ids[i] = piece.getId();
+            weights[i] = piece.getWeight();
+
+            bundle.putFloatArray(LOCATIONS, locations);
+            bundle.putIntArray(IDS,  ids);
+            bundle.putIntArray(WEIGHTS, weights);
+        }
+
+        scores[PLAYER_ONE] = playerOneScore;
+        scores[PLAYER_TWO] = playerTwoScore;
+        bundle.putIntArray(SCORES, scores);
+        bundle.putSerializable( TOUCHSTATE, touchState );
+    }
+
+    /**
+     * Read the Game from a bundle
+     * @param bundle The bundle we save to
+     */
+    public void loadInstanceState(Bundle bundle) {
+        float [] locations = bundle.getFloatArray(LOCATIONS);
+        int [] ids = bundle.getIntArray(IDS);
+        int [] scores = bundle.getIntArray(SCORES);
+        int [] weights = bundle.getIntArray(WEIGHTS);
+        
+        playerOneScore = scores[PLAYER_ONE];
+        playerTwoScore = scores[PLAYER_TWO];
+
+        if ( ids != null ) {
+            for(int i=0; i<ids.length; i++) {
+                // Since we're starting with empty array of blocks, loop through ids and create corresponding block
+                if( ids[i] == R.drawable.brick_red1 ) {
+                    addBlock(blockView, weights[i], 1);
+                } else if ( ids[i] == R.drawable.brick_blue ) {
+                    addBlock(blockView, weights[i], 2);
+                }
+            }
+        } else {
+            return;
+        }
+
+        for(int i=0;  i<blocks.size(); i++) {
+            BlockPiece piece = blocks.get(i);
+            piece.setX(locations[i*2]);
+            piece.setY(locations[i*2+1]);
+        }
+
+        if ( topBlock.getId() == R.drawable.brick_red1 ) {
+            blockView.updateTurn(0);
+        } else {
+            blockView.updateTurn(1);
+        }
+
+        touchState = (touchStates) bundle.getSerializable(TOUCHSTATE);
+        updateScore();
+
+    }
 }

@@ -1,11 +1,10 @@
 package edu.msu.comfortablynumb.project1;
 
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.util.Log;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,8 +29,12 @@ public class GameActivity extends Activity {
 		setContentView(R.layout.activity_game);
         setTitle("Comfortably Numb");
 
-
 		blockView = (BlockView)this.findViewById(R.id.blockView);
+
+        if(bundle != null) {
+            // We have saved state
+            blockView.loadInstanceState(bundle);
+        }
 
         // Grab player names and scores
         Intent intent = this.getIntent();
@@ -78,10 +81,18 @@ public class GameActivity extends Activity {
 	}
 
 	public void onWeightSelected(View view){
-
-		CharSequence weight = ((Button) view).getText();
-		blockView.forwardOnWeightSelected(weight);
-
+		int weight;
+		CharSequence weightCharSeq = ((Button) view).getText();
+        if( weightCharSeq.equals("1 kg") ) {
+            weight = 1;
+        } else if ( weightCharSeq.equals("2 kg") ) {
+            weight = 2;
+        } else if ( weightCharSeq.equals("5 kg") ) {
+            weight = 5;
+        } else {
+            weight = 10;
+        }
+        blockView.forwardOnWeightSelected(weight);
 	}
 
 	public void onEndGame(View view) {
@@ -107,6 +118,17 @@ public class GameActivity extends Activity {
         setIntent.addCategory(Intent.CATEGORY_HOME);
         setIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(setIntent);
+    }
+
+    /**
+     * Save the instance state into a bundle
+     * @param bundle the bundle to save into
+     */
+    @Override
+    protected void onSaveInstanceState(Bundle bundle) {
+        super.onSaveInstanceState(bundle);
+
+        blockView.saveInstanceState(bundle);
     }
 
     public TextView getPlayerOneScoreView() {

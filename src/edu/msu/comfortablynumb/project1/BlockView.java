@@ -2,6 +2,7 @@ package edu.msu.comfortablynumb.project1;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -58,13 +59,33 @@ public class BlockView extends View {
 		return game.onTouchEvent(this, event);
 	}
 
-	public void forwardOnWeightSelected(CharSequence weight){
-
+	public void forwardOnWeightSelected(int weight){
+		
 		game.addBlock(this, weight, turn);
 		if(turn==1)
 			turn = 0;
 		else
 			turn =1;
 	}
+
+    public void updateTurn( int currentTurn ) {
+        turn = currentTurn;
+    }
+
+    /**
+     * Save the Game to a bundle
+     * @param bundle The bundle we save to
+     */
+    public void saveInstanceState(Bundle bundle) {
+        game.saveInstanceState(bundle);
+    }
+
+    /**
+     * Load the Game from a bundle
+     * @param bundle The bundle we save to
+     */
+    public void loadInstanceState(Bundle bundle) {
+        game.loadInstanceState(bundle);
+    }
 
 }
