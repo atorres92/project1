@@ -7,6 +7,11 @@ import android.graphics.Canvas;
 
 public class BlockPiece {
 
+	//The rate at which the blocks will fall down
+	private float FALL_RATE = 1f;
+
+	//How far the blocks have fallen
+	private float amountFallen;
 
 	private int id;
 
@@ -24,6 +29,34 @@ public class BlockPiece {
 
 	//the image of the block
 	private Bitmap block;
+
+	//the X position of the block the stack is turning around
+	private float turnBlockX;
+
+	public float getTurnBlockX() {
+		return turnBlockX;
+	}
+
+
+
+	public void setTurnBlockX(float turnBlockX) {
+		this.turnBlockX = turnBlockX;
+	}
+
+
+
+	public float getTurnBlockY() {
+		return turnBlockY;
+	}
+
+
+
+	public void setTurnBlockY(float turnBlockY) {
+		this.turnBlockY = turnBlockY;
+	}
+
+	//the Y position of the block the stack is turning around
+	private float turnBlockY;
 
 	/**
 	 * x location
@@ -89,6 +122,11 @@ public class BlockPiece {
 		return block.getWidth();
 	}
 
+	public int getHeight(){
+		return block.getWidth();
+	}
+
+
 	public BlockPiece(Context context, int id, float dy, float center, int weight) {
 		this.placed=false;
 		this.id = id;
@@ -96,6 +134,8 @@ public class BlockPiece {
 		block = BitmapFactory.decodeResource(context.getResources(), id);
 		this.x = center - (float) block.getWidth()/2;
 		this.y = dy+1;
+		this.turnBlockX = 0.0f;
+		this.turnBlockY = 0.0f;
 		this.rotation = 0f;
 	}
 
@@ -105,8 +145,21 @@ public class BlockPiece {
 
 		canvas.save();
 		int height = canvas.getHeight();
-		canvas.translate(x, height - (block.getHeight()*y));
-		canvas.rotate(rotation);
+		if(this.turnBlockX != 0.0f || this.turnBlockY != 0.0f){
+			canvas.translate(turnBlockX,  height - (block.getHeight()*turnBlockY));
+			canvas.rotate(rotation);
+			if(rotation > 70 || rotation <-70){
+				amountFallen += FALL_RATE;
+				canvas.translate(-turnBlockX, -(height - (block.getHeight()*turnBlockY)));
+			}
+			else
+				canvas.translate(-turnBlockX, -(height - (block.getHeight()*turnBlockY)));
+		}
+		if(rotation > 0)
+			canvas.translate(amountFallen+ x, height - (block.getHeight()*y));
+		else
+			canvas.translate(-amountFallen+ x, height - (block.getHeight()*y));
+
 		canvas.drawBitmap(block, 0, 0,null);
 		canvas.restore();
 	}

@@ -11,8 +11,7 @@ import java.util.ArrayList;
 
 public class Game {
 
-	private final float TURN_TIME = 10000;
-	private final float FALL_TIME = 9000;
+	private final float TURN_TIME = 3500;
 
     private GameActivity gameActivity;
 
@@ -126,7 +125,7 @@ public class Game {
 		gameContext = context;
 		stackState = stackStates.standing;
         gameActivity = blockView.getGameActivity();
-        turningBlock = 0;
+        turningBlock = -1;
         fallingStartTime = 0;
 
 	}
@@ -182,10 +181,20 @@ public class Game {
 		if(stackState == stackStates.fallingLeft || stackState == stackStates.fallingRight){
 			if((currentTime-fallingStartTime) < TURN_TIME){
 				for(int i = turningBlock +1 ; i < blocks.size(); i++){
-					blocks.get(i).setRotation((((float)(currentTime-fallingStartTime))/TURN_TIME) * 90);
+					if(stackState == stackStates.fallingRight)
+						blocks.get(i).setRotation((((float)(currentTime-fallingStartTime))/TURN_TIME) * 90);
+					else
+						blocks.get(i).setRotation((((float)(currentTime-fallingStartTime))/TURN_TIME) * -90);
 				}
 
 			}
+			else{
+				stackState = stackStates.fallen;
+
+			}
+
+
+			blockView.invalidate();
 		}
 
 		//draws the block pieces
@@ -249,6 +258,20 @@ public class Game {
 		if(touchState == touchStates.horizontal){
 			touchState = touchStates.vertical;
 			turningBlock = calculateCenterOfMass();
+			if(turningBlock != -1){
+				for (int j = turningBlock +1; j < blocks.size(); j++){
+					if(stackState == stackStates.fallingRight){
+						blocks.get(j).setTurnBlockX(blocks.get(turningBlock).getX() + blocks.get(j).getWidth());
+						blocks.get(j).setTurnBlockY(blocks.get(turningBlock).getY());
+					}
+					else{
+						blocks.get(j).setTurnBlockX(blocks.get(turningBlock).getX()) ;
+						blocks.get(j).setTurnBlockY(blocks.get(turningBlock).getY());
+					}
+
+			     }
+			}
+
 		}
 		else if (touchState == touchStates.vertical)
 			;
@@ -284,8 +307,6 @@ public class Game {
 		     }
 			centerOfMass[0] = (float) (1.0 / ((float)sumMass) *sumX);
 			centerOfMass[1] = (float) (1.0 / ((float)sumMass) *sumY);
-
-			Log.i("Block Position", "Top Block pos: " + topBlock.getX());
 
 			BlockPiece bottom = blocks.get(i);
 			if(bottom.getX() - (bottom.getWidth()/2) < centerOfMass[0] && (bottom.getX() + (bottom.getWidth()/2))  >  centerOfMass[0] ){
