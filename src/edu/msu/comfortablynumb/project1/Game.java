@@ -131,20 +131,22 @@ public class Game {
 	}
 
 	public void addBlock( View view, int weight, int player){
-		//sets the touch state to horizontal so the block piece can be moved horizontally
-		touchState = touchStates.horizontal;
+		if(stackState == stackStates.standing ){
+			//sets the touch state to horizontal so the block piece can be moved horizontally
+			touchState = touchStates.horizontal;
 
-		//draws the block a certain color depending on the player
-		if(player ==1){
-		blocks.add(new BlockPiece(gameContext, R.drawable.brick_red1, numBlocks, centerCanvas, weight));
+			//draws the block a certain color depending on the player
+			if(player ==1){
+			blocks.add(new BlockPiece(gameContext, R.drawable.brick_red1, numBlocks, centerCanvas, weight));
+			}
+			else{
+			blocks.add(new BlockPiece(gameContext, R.drawable.brick_blue, numBlocks, centerCanvas, weight));
+			}
+			numBlocks+=1;
+			topBlock = blocks.get(numBlocks-1);
+			lastRelX = topBlock.getX();
+			view.invalidate();
 		}
-		else{
-		blocks.add(new BlockPiece(gameContext, R.drawable.brick_blue, numBlocks, centerCanvas, weight));
-		}
-		numBlocks+=1;
-		topBlock = blocks.get(numBlocks-1);
-		lastRelX = topBlock.getX();
-		view.invalidate();
 
 	}
 
@@ -190,6 +192,7 @@ public class Game {
 			}
 			else{
 				stackState = stackStates.fallen;
+				restartGame();
 
 			}
 
@@ -329,6 +332,23 @@ public class Game {
 
 		Log.i("standing", "Still Standing");
 		return -1;
+	}
+
+	public void restartGame() {
+		if(blockView.getTurn() == 1)
+			playerTwoScore += 1;
+		else
+			playerOneScore += 1;
+
+		//Someone wins when they get 3 points
+		if(playerOneScore >= 3 || playerTwoScore >= 3 )
+			gameActivity.onEndGame(blockView);
+
+		blocks.clear();
+		numBlocks = 0;
+		topBlock = null;
+		fallingStartTime =0;
+		stackState = stackStates.standing;
 	}
 
     /**

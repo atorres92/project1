@@ -12,7 +12,24 @@ public class BlockView extends View {
 	private Game game;
 
 	private int turn;
-    private GameActivity gameActivity;
+
+    public int getTurn() {
+		return turn;
+	}
+
+	public void setTurn(int turn) {
+		this.turn = turn;
+	}
+
+	public Game getGame() {
+		return game;
+	}
+
+	public void setGame(Game game) {
+		this.game = game;
+	}
+
+	private GameActivity gameActivity;
 
     public GameActivity getGameActivity() {
         return gameActivity;
@@ -60,7 +77,7 @@ public class BlockView extends View {
 	}
 
 	public void forwardOnWeightSelected(int weight){
-		
+
 		game.addBlock(this, weight, turn);
 		if(turn==1)
 			turn = 0;
