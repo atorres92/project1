@@ -25,6 +25,14 @@ public class Game {
 	 */
 	private float lastRelX;
 
+	public float getLastRelX() {
+		return lastRelX;
+	}
+
+	public void setLastRelX(float lastRelX) {
+		this.lastRelX = lastRelX;
+	}
+
 	/**
 	 * last relative location of Y
 	 */
@@ -102,7 +110,6 @@ public class Game {
     private final static String WEIGHTS = "Game.weights";
     private final static String SCORES = "Game.scores";
     private final static String TOUCHSTATE = "Game.touchstate";
-    private final static String DIMS = "Game.dims";
 
     /**
      * Constants for index values
@@ -147,7 +154,6 @@ public class Game {
 
 	public void addBlock( View view, int weight, int player){
         view.measure(View.MeasureSpec.EXACTLY, View.MeasureSpec.EXACTLY);
-        int width =  view.getMeasuredWidth();
 
         if(stackState == stackStates.standing ){
 			//sets the touch state to horizontal so the block piece can be moved horizontally
