@@ -2,7 +2,6 @@ package edu.msu.comfortablynumb.project1;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -28,6 +27,11 @@ public class MainActivity extends Activity {
 
         playerOneText = (EditText) findViewById(R.id.player1Input);
         playerTwoText = (EditText) findViewById(R.id.player2Input);
+
+        if ( savedInstanceState != null ) {
+            loadInstanceState(savedInstanceState);
+        }
+
     }
 
 	@Override
@@ -64,20 +68,22 @@ public class MainActivity extends Activity {
 	}
 
 	public void onStartGame(View view) {
-        if (playerOneText.getText().toString().matches("") || playerTwoText.getText().toString().matches("")) {
-            Toast.makeText(getApplicationContext(), ENTER_PLAYER_NAME,
-                    Toast.LENGTH_SHORT).show();
-        } else {
-            String playerOneName = playerOneText.getText().toString();
-            String playerTwoName = playerTwoText.getText().toString();
+        if ( playerOneText.getText() != null && playerTwoText.getText() != null && getApplicationContext() != null ) {
+            if (playerOneText.getText().toString().matches("") || playerTwoText.getText().toString().matches("")) {
+                Toast.makeText(getApplicationContext(), ENTER_PLAYER_NAME,
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                String playerOneName = playerOneText.getText().toString();
+                String playerTwoName = playerTwoText.getText().toString();
 
-            Intent intent = new Intent(this, GameActivity.class);
+                Intent intent = new Intent(this, GameActivity.class);
 
-            intent.putExtra(PLAYER_ONE_NAME, playerOneName);
-            intent.putExtra(PLAYER_TWO_NAME, playerTwoName);
+                intent.putExtra(PLAYER_ONE_NAME, playerOneName);
+                intent.putExtra(PLAYER_TWO_NAME, playerTwoName);
 
-            startActivity(intent);
-            finish();
+                startActivity(intent);
+                finish();
+            }
         }
 	}
 
@@ -85,12 +91,17 @@ public class MainActivity extends Activity {
      * Save the names to a bundle
      * @param bundle The bundle we save to
      */
-    public void saveInstanceState(Bundle bundle) {
-        String [] names = new String[2];
+    @Override
+    protected void onSaveInstanceState(Bundle bundle) {
+        super.onSaveInstanceState( bundle );
 
-        names[0] = playerOneText.getText().toString();
-        names[1] = playerTwoText.getText().toString();
-        bundle.putStringArray(NAMES, names);
+        String [] names = new String[Game.PLAYERS];
+
+        if (playerOneText.getText() != null && playerTwoText.getText() != null ) {
+            names[Game.PLAYER_ONE] = playerOneText.getText().toString();
+            names[Game.PLAYER_TWO] = playerTwoText.getText().toString();
+            bundle.putStringArray(NAMES, names);
+        }
     }
 
     /**
@@ -99,8 +110,10 @@ public class MainActivity extends Activity {
      */
     public void loadInstanceState(Bundle bundle) {
         String [] names = bundle.getStringArray(NAMES);
-        playerOneText.setText(names[0]);
-        playerTwoText.setText(names[1]);
+        if ( names != null ) {
+            playerOneText.setText(names[Game.PLAYER_ONE]);
+            playerTwoText.setText(names[Game.PLAYER_TWO]);
+        }
     }
 
 }

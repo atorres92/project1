@@ -13,12 +13,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:id="@+id/playerOneScore" android:paddingLeft="10dp" android:layout_gravity="center_vertical"/>
+                android:id="@+id/playerOneScore" android:paddingLeft="10dp" android:layout_gravity="center_vertical"
+                android:textColor="@color/brickblue"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:id="@+id/playerTwoScore" android:layout_gravity="center_vertical|right" android:paddingRight="10dp"/>
+                android:id="@+id/playerTwoScore" android:layout_gravity="center_vertical|right" android:paddingRight="10dp"
+                android:textColor="@color/brickred1"/>
     </FrameLayout>
     <edu.msu.comfortablynumb.project1.BlockView
         android:id="@+id/blockView"
@@ -69,15 +71,6 @@
             android:layout_toRightOf="@+id/button3"
             android:onClick="onWeightSelected"
             android:text="@string/tenkg" />
-
-        <Button
-            android:id="@+id/end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/button4"
-            android:onClick="onEndGame"
-            android:text="@string/endGame" />
 
     </RelativeLayout>
 

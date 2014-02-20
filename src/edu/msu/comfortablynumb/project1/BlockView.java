@@ -59,7 +59,7 @@ public class BlockView extends View {
 
 	private void init(Context context){
 		game = new Game(context, this.findViewById(R.id.blockView)) ;
-		turn = 1;
+		setTurn(1);
 	}
 
 
@@ -80,9 +80,9 @@ public class BlockView extends View {
 
 		game.addBlock(this, weight, turn);
 		if(turn==1)
-			turn = 0;
+			setTurn(0);
 		else
-			turn =1;
+			setTurn(1);
 	}
 
     public void updateTurn( int currentTurn ) {

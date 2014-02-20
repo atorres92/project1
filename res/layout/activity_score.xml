@@ -12,7 +12,7 @@
     tools:context=".MainActivity" >
 
     <TextView
-        android:id="@+id/Player1Winner"
+        android:id="@+id/winnerText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -30,7 +30,7 @@
         android:src="@drawable/stacker1" />
 
     <TextView
-        android:id="@+id/Player2Loser"
+        android:id="@+id/loserText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"

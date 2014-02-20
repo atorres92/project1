@@ -168,4 +168,8 @@ public class BlockPiece {
 		x=dx;
 	}
 
+    public void centerX( float center ) {
+        this.x = center - ( (float) block.getWidth() / 2f );
+    }
+
 }

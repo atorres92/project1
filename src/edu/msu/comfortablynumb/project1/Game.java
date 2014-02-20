@@ -3,7 +3,6 @@ package edu.msu.comfortablynumb.project1;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -11,7 +10,7 @@ import java.util.ArrayList;
 
 public class Game {
 
-	private final float TURN_TIME = 3500;
+	private final float TURN_TIME = 2000;
 
     private GameActivity gameActivity;
 
@@ -31,7 +30,14 @@ public class Game {
 	 */
 	private float lastRelY;
 
+    /**
+     * Score for player one
+     */
     private int playerOneScore;
+
+    /**
+     * score for player two
+     */
     private int playerTwoScore;
 
 	/**
@@ -53,6 +59,9 @@ public class Game {
 	 */
 	private float centerCanvas;
 
+    /**
+     * Context of game
+     */
 	private Context gameContext;
 
 	/**
@@ -93,9 +102,14 @@ public class Game {
     private final static String WEIGHTS = "Game.weights";
     private final static String SCORES = "Game.scores";
     private final static String TOUCHSTATE = "Game.touchstate";
-    private final static int PLAYERS = 2;
-    private final static int PLAYER_ONE = 0;
-    private final static int PLAYER_TWO = 1;
+    private final static String DIMS = "Game.dims";
+
+    /**
+     * Constants for index values
+     */
+    public final static int PLAYERS = 2;
+    public final static int PLAYER_ONE = 0;
+    public final static int PLAYER_TWO = 1;
 
     public GameActivity getGameActivity() {
         return gameActivity;
@@ -116,6 +130,7 @@ public class Game {
     }
 
 	public Game(Context context, View view) {
+
         blocks = new ArrayList<BlockPiece>();
         touchState = touchStates.none;
         playerOneScore = 0;
@@ -131,7 +146,10 @@ public class Game {
 	}
 
 	public void addBlock( View view, int weight, int player){
-		if(stackState == stackStates.standing ){
+        view.measure(View.MeasureSpec.EXACTLY, View.MeasureSpec.EXACTLY);
+        int width =  view.getMeasuredWidth();
+
+        if(stackState == stackStates.standing ){
 			//sets the touch state to horizontal so the block piece can be moved horizontally
 			touchState = touchStates.horizontal;
 
@@ -151,25 +169,22 @@ public class Game {
 	}
 
 	public void draw(Canvas canvas){
+        int wid = canvas.getWidth();
 
-		int wid = canvas.getWidth();
-		int hit = canvas.getHeight();
+        if ( centerCanvas == 0 ) {
+            centerCanvas = ( (float) wid / 2f );
+            updateBlockPieceLocation();
+        }
 
-		int minDim = wid < hit ? wid : hit;
+        centerCanvas = ( (float) wid / 2f );
 
-		if( wid == minDim)
-			centerCanvas =  (float) ((float) wid/2.0);
-		else
-			centerCanvas = (float) ((float) wid/2.0) ;
-
-		Log.i("draw", " " + wid + "center " + centerCanvas);
 		canvas.save();
 
 		//allows for vertical scrolling.
-		if(touchState == touchStates.vertical){
+		if(touchState == touchStates.vertical && stackState == stackStates.standing){
 			if(lastLastRelY <lastRelY )
 				offset +=5;
-			else if (lastLastRelY > lastRelY &&  offset >=0)
+			else if (lastLastRelY > lastRelY &&  offset >=0 && stackState == stackStates.standing)
 				offset -=5;
 		}
 		canvas.translate(0, offset);
@@ -316,21 +331,15 @@ public class Game {
 			}
 
 			else if (bottom.getX() - (bottom.getWidth()/2) >= centerOfMass[0]){
-				Log.i("falling", "Fallling at block: " + i);
 				stackState = stackStates.fallingLeft;
 				return i;
 			}
 			else{
-				Log.i("falling", "Fallling at block: " + i);
 				stackState = stackStates.fallingRight;
 				return i;
 			}
 
 		}
-
-
-
-		Log.i("standing", "Still Standing");
 		return -1;
 	}
 
@@ -340,11 +349,16 @@ public class Game {
 		else
 			playerOneScore += 1;
 
+        updateScore();
 		//Someone wins when they get 3 points
-		if(playerOneScore >= 3 || playerTwoScore >= 3 )
-			gameActivity.onEndGame(blockView);
+		if(playerOneScore >= 5 ) {
+            gameActivity.onEndGame(blockView, MainActivity.PLAYER_ONE_NAME);
+        } else if ( playerTwoScore >= 5) {
+            gameActivity.onEndGame(blockView, MainActivity.PLAYER_TWO_NAME);
+        }
 
 		blocks.clear();
+        offset=0;
 		numBlocks = 0;
 		topBlock = null;
 		fallingStartTime =0;
@@ -418,7 +432,15 @@ public class Game {
         }
 
         touchState = (touchStates) bundle.getSerializable(TOUCHSTATE);
+        centerCanvas = 0;
         updateScore();
 
+    }
+
+    private void updateBlockPieceLocation() {
+        for(int i=0;  i<blocks.size(); i++) {
+            BlockPiece piece = blocks.get(i);
+            piece.centerX(centerCanvas);
+        }
     }
 }

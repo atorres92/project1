@@ -2,11 +2,8 @@ package edu.msu.comfortablynumb.project1;
 
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,9 +18,11 @@ public class GameActivity extends Activity {
     private String playerOneName;
     private String playerTwoName;
 
-    public static enum playerNames { playerone, playertwo };
+    public static final String NAMES = "GameActivity.names";
+    public static final String WINNER = "GameActivity.winner";
+    public static final String LOSER = "GameActivity.loser";
 
-	@Override
+    @Override
 	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 		setContentView(R.layout.activity_game);
@@ -33,84 +32,51 @@ public class GameActivity extends Activity {
 
         if(bundle != null) {
             // We have saved state
-            blockView.loadInstanceState(bundle);
+            loadInstanceState(bundle);
         }
 
         // Grab player names and scores
         Intent intent = this.getIntent();
-        playerOneName = intent.getStringExtra(MainActivity.PLAYER_ONE_NAME);
-        playerTwoName = intent.getStringExtra(MainActivity.PLAYER_TWO_NAME);
-        playerOneScoreView = (TextView)this.findViewById(R.id.playerOneScore);
-        playerTwoScoreView = (TextView)this.findViewById(R.id.playerTwoScore);
+        setPlayerOneName(intent.getStringExtra(MainActivity.PLAYER_ONE_NAME));
+        setPlayerTwoName(intent.getStringExtra(MainActivity.PLAYER_TWO_NAME));
+        setPlayerOneScoreView( (TextView)this.findViewById(R.id.playerOneScore) );
+        setPlayerTwoScoreView((TextView) this.findViewById(R.id.playerTwoScore));
 
         //send activity to blockView so it can grab player names and scores
         blockView.setGameActivity(this);
     }
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.game, menu);
-		return true;
-	}
-
-	/**
-	 * Called when options button selected
-	 * @param item a menu item to use
-	 */
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-        case R.id.menu_help:
-            // The puzzle is done
-            // Instantiate a dialog box builder
-            AlertDialog.Builder builder = new AlertDialog.Builder(GameActivity.this);
-
-            // Parameterize the builder
-            builder.setTitle(R.string.howtoplay);
-            builder.setMessage(R.string.howtotext);
-            builder.setPositiveButton(android.R.string.ok, null);
-
-            // Create the dialog box and show it
-            AlertDialog alertDialog = builder.create();
-            alertDialog.show();
-            return true;
-
-        default:
-            return super.onOptionsItemSelected(item);
-        }
-	}
-
 	public void onWeightSelected(View view){
 		int weight;
 		CharSequence weightCharSeq = ((Button) view).getText();
-        if( weightCharSeq.equals("1 kg") ) {
-            weight = 1;
-        } else if ( weightCharSeq.equals("2 kg") ) {
-            weight = 2;
-        } else if ( weightCharSeq.equals("5 kg") ) {
-            weight = 5;
-        } else {
-            weight = 10;
+        if (weightCharSeq != null) {
+            if( weightCharSeq.equals("1 kg") ) {
+                weight = 1;
+            } else if ( weightCharSeq.equals("2 kg") ) {
+                weight = 2;
+            } else if ( weightCharSeq.equals("5 kg") ) {
+                weight = 5;
+            } else {
+                weight = 10;
+            }
+            blockView.forwardOnWeightSelected(weight);
         }
-        blockView.forwardOnWeightSelected(weight);
 	}
 
-	public void onEndGame(View view) {
+	public void onEndGame(View view, String winner) {
+ 		Intent intent = new Intent(this, ScoreActivity.class);
 
-		Intent intent = new Intent(this, ScoreActivity.class);
+        if ( winner == MainActivity.PLAYER_ONE_NAME ) {
+            intent.putExtra(WINNER, playerOneScoreView.getText().toString());
+            intent.putExtra(LOSER, playerTwoScoreView.getText().toString());
+        } else {
+            intent.putExtra(WINNER, playerTwoScoreView.getText().toString());
+            intent.putExtra(LOSER, playerOneScoreView.getText().toString());
+        }
 
 		startActivity(intent);
         finish();
 	}
-
-    public void updateScore( playerNames player, int score ) {
-        switch (player) {
-            case playerone:
-                playerOneScoreView.setText( playerOneName + ":" + score );
-            case playertwo:
-                playerTwoScoreView.setText( playerTwoName + ":" + score );
-        }
-    }
 
     @Override
     public void onBackPressed() {
@@ -128,12 +94,28 @@ public class GameActivity extends Activity {
     protected void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
 
+        String [] names = new String[Game.PLAYERS];
+        names[Game.PLAYER_ONE] = playerOneName;
+        names[Game.PLAYER_TWO] = playerTwoName;
+        bundle.putStringArray(NAMES, names);
+
         blockView.saveInstanceState(bundle);
     }
 
-    public TextView getPlayerOneScoreView() {
-        return playerOneScoreView;
+    /**
+     * Read the Game from a bundle
+     * @param bundle The bundle we save to
+     */
+    public void loadInstanceState(Bundle bundle) {
+        String [] names = bundle.getStringArray(NAMES);
+        if ( names != null ) {
+            playerOneName = names[Game.PLAYER_ONE];
+            playerTwoName = names[Game.PLAYER_TWO];
+            blockView.loadInstanceState(bundle);
+        }
     }
+
+    public TextView getPlayerOneScoreView() { return playerOneScoreView; }
 
     public void setPlayerOneScoreView(TextView playerOneScoreView) {
         this.playerOneScoreView = playerOneScoreView;
