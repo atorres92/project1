@@ -359,6 +359,8 @@ public class Game {
 
 		blocks.clear();
         offset=0;
+        blockView.setTurn(0);
+
 		numBlocks = 0;
 		topBlock = null;
 		fallingStartTime =0;
