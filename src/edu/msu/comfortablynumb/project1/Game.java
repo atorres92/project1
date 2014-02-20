@@ -176,12 +176,6 @@ public class Game {
 
 	public void draw(Canvas canvas){
         int wid = canvas.getWidth();
-
-        if ( centerCanvas == 0 ) {
-            centerCanvas = ( (float) wid / 2f );
-            updateBlockPieceLocation();
-        }
-
         centerCanvas = ( (float) wid / 2f );
 
 		canvas.save();
@@ -438,15 +432,7 @@ public class Game {
         }
 
         touchState = (touchStates) bundle.getSerializable(TOUCHSTATE);
-        centerCanvas = 0;
         updateScore();
 
-    }
-
-    private void updateBlockPieceLocation() {
-        for(int i=0;  i<blocks.size(); i++) {
-            BlockPiece piece = blocks.get(i);
-            piece.centerX(centerCanvas);
-        }
     }
 }

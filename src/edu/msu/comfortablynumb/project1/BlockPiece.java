@@ -8,7 +8,7 @@ import android.graphics.Canvas;
 public class BlockPiece {
 
 	//The rate at which the blocks will fall down
-	private float FALL_RATE = 1f;
+	private float FALL_RATE;
 
 	//How far the blocks have fallen
 	private float amountFallen;
@@ -128,6 +128,7 @@ public class BlockPiece {
 
 
 	public BlockPiece(Context context, int id, float dy, float center, int weight) {
+        this.FALL_RATE = 1f;
 		this.placed=false;
 		this.id = id;
 		this.weight = weight;
@@ -167,9 +168,4 @@ public class BlockPiece {
 	public void move(float dx, float dy){
 		x=dx;
 	}
-
-    public void centerX( float center ) {
-        this.x = center - ( (float) block.getWidth() / 2f );
-    }
-
 }
