@@ -25,5 +25,6 @@
     <string name="password">Password:</string>
     <string name="login">Login</string>
     <string name="createaccount">Create Account</string>
+    <string name="remember">Remember</string>
 
 </resources>

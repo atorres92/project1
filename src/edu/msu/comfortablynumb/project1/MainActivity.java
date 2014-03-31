@@ -7,20 +7,29 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
+    /*
+     * DELETE THIS!!!!!!
+     */
 	static final String PLAYER_ONE_NAME = "PLAYER_ONE_NAME";
 	static final String PLAYER_TWO_NAME = "PLAYER_TWO_NAME";
     static final String ENTER_PLAYER_NAME = "Please Enter Names";
     static final String NAMES = "NAMES";
+    //////////////////////////////////////
+
 	static final String USERNAME = "USERNAME";
 	static final String PASSWORD = "PASSWORD";
+    static final String REMEMBER = "REMEMBER";
     static final String LOGIN_FAILED = "Login Failed";
     EditText usernameText;
     EditText passwordText;
+    CheckBox checkbox;
+    boolean remember = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +39,7 @@ public class MainActivity extends Activity {
 
         usernameText = (EditText) findViewById(R.id.usernameText);
         passwordText = (EditText) findViewById(R.id.passwordText);
+        checkbox = (CheckBox) findViewById(R.id.checkBox);
 
         if ( savedInstanceState != null ) {
             loadInstanceState(savedInstanceState);
@@ -121,8 +131,10 @@ public class MainActivity extends Activity {
         if (usernameText.getText() != null && passwordText.getText() != null ) {
             String username = usernameText.getText().toString();
             String password =  passwordText.getText().toString();
+
             bundle.putString(USERNAME, username);
             bundle.putString(PASSWORD, password);
+            bundle.putBoolean(REMEMBER, remember);
         }
 
     }
@@ -134,10 +146,22 @@ public class MainActivity extends Activity {
     public void loadInstanceState(Bundle bundle) {
         String username = bundle.getString(USERNAME);
         String password = bundle.getString(PASSWORD);
+        remember = bundle.getBoolean(REMEMBER);
+        checkbox.setChecked(remember);
 
         if ( username != null && password != null ) {
             usernameText.setText(username);
             passwordText.setText(password);
+        }
+    }
+
+    public void onRemember(View view) {
+        if (checkbox.isChecked()) {
+            Log.i("Checked","checked");
+            remember = true;
+        } else {
+            Log.i("Unchecked","unchecked");
+            remember = false;
         }
     }
 
