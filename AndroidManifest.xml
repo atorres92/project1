@@ -30,6 +30,7 @@
             android:name="edu.msu.comfortablynumb.project1.ScoreActivity"
             android:label="@string/title_activity_score" >
         </activity>
+        <activity android:name=".CreateAccountActivity"/>
     </application>
 
 </manifest>

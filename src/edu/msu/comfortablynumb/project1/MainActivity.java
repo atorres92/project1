@@ -2,6 +2,7 @@ package edu.msu.comfortablynumb.project1;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -96,6 +97,9 @@ public class MainActivity extends Activity {
 
     public void onCreateAccount(View view) {
         Log.i("Clicked create account button", "A1234");
+
+        Intent intent = new Intent(this, CreateAccountActivity.class);
+        startActivity(intent);
     }
 
     /*

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+    <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/frameSpacer"
+            android:layout_centerInParent="true" android:padding="10dp">
+    </FrameLayout>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/createaccount"
+            android:id="@+id/createAccount"
+            android:layout_marginTop="22dp" android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/username"
+            android:id="@+id/username"
+            android:layout_above="@+id/frameSpacer" android:layout_toLeftOf="@+id/frameSpacer" android:textSize="15sp"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/password"
+            android:id="@+id/password"
+            android:layout_below="@+id/frameSpacer" android:layout_toLeftOf="@+id/frameSpacer" android:textSize="15sp"/>
+    <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/usernameText"
+            android:layout_alignRight="@+id/passwordText" android:layout_alignEnd="@+id/passwordText"
+            android:layout_above="@+id/frameSpacer"
+            android:layout_alignBottom="@+id/username" android:layout_toRightOf="@+id/username"/>
+    <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:id="@+id/passwordText"
+            android:layout_alignBottom="@+id/password" android:layout_toRightOf="@+id/password"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/confirmpassword"
+            android:id="@+id/confirmPassword"
+            android:layout_alignBottom="@+id/confirmPasswordText" android:layout_toLeftOf="@+id/passwordText"
+            android:textSize="15sp"/>
+    <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:id="@+id/confirmPasswordText"
+            android:layout_below="@+id/passwordText" android:layout_toRightOf="@+id/confirmPassword"/>
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/createaccount"
+            android:id="@+id/button"
+            android:onClick="onCreateAccount" android:layout_below="@+id/confirmPassword"
+            android:layout_alignRight="@+id/createAccount" android:layout_alignEnd="@+id/createAccount"
+            android:layout_marginTop="5dp"/>
+    <FrameLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/frameSpacer2"
+                 android:padding="10dp" android:layout_above="@+id/confirmPasswordText" android:layout_toRightOf="@+id/password"/>
+</RelativeLayout>
