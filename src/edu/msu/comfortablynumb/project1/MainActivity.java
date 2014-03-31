@@ -3,6 +3,7 @@ package edu.msu.comfortablynumb.project1;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -15,7 +16,7 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 
     /*
-     * DELETE THIS!!!!!!
+     * DELETE THIS LATER!!!!!!
      */
 	static final String PLAYER_ONE_NAME = "PLAYER_ONE_NAME";
 	static final String PLAYER_TWO_NAME = "PLAYER_TWO_NAME";
@@ -23,14 +24,18 @@ public class MainActivity extends Activity {
     static final String NAMES = "NAMES";
     //////////////////////////////////////
 
+    private static final String PREFERENCES = "preferences";
+
 	static final String USERNAME = "USERNAME";
 	static final String PASSWORD = "PASSWORD";
     static final String REMEMBER = "REMEMBER";
-    static final String LOGIN_FAILED = "Login Failed";
+    static final String FILL_INFO = "Please fill out the forms";
+    static final String INVALID_USER_PASS = "Invalid Username or Password";
     EditText usernameText;
     EditText passwordText;
     CheckBox checkbox;
     boolean remember = false;
+    SharedPreferences settings;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +46,10 @@ public class MainActivity extends Activity {
         usernameText = (EditText) findViewById(R.id.usernameText);
         passwordText = (EditText) findViewById(R.id.passwordText);
         checkbox = (CheckBox) findViewById(R.id.checkBox);
+
+        settings = getSharedPreferences(PREFERENCES, MODE_PRIVATE);
+        readPreferences();
+        checkbox.setChecked(remember);
 
         if ( savedInstanceState != null ) {
             loadInstanceState(savedInstanceState);
@@ -85,13 +94,27 @@ public class MainActivity extends Activity {
         Log.i("Clicked login button", "A1234");
 
         if ( !usernameText.getText().toString().equals("") && !passwordText.getText().toString().equals("") ) {
+
+            if(checkbox.isChecked()) {
+                writePreferences();
+            } else {
+                clearPreferences();
+            }
+            //Dummy activity code.  Goes to waiting screen
+            Intent intent = new Intent(this, WaitingActivity.class);
+            startActivity(intent);
+            //
+
+
             //
             //
-            //Server code here
+            //Server code here, if invalid username or password, use: Toast.makeText(this, INVALID_USER_PASS, Toast.LENGTH_SHORT).show();
             //
             //
+
+
         } else {
-            Toast.makeText(this, LOGIN_FAILED, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, FILL_INFO, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -167,6 +190,32 @@ public class MainActivity extends Activity {
             Log.i("Unchecked","unchecked");
             remember = false;
         }
+    }
+
+    private void readPreferences() {
+        usernameText.setText(settings.getString(USERNAME, ""));
+        passwordText.setText(settings.getString(PASSWORD, ""));
+        remember = settings.getBoolean(REMEMBER, false);
+    }
+
+    private void writePreferences() {
+        SharedPreferences.Editor editor = settings.edit();
+
+        editor.putString(USERNAME, usernameText.getText().toString());
+        editor.putString(PASSWORD, passwordText.getText().toString());
+        editor.putBoolean(REMEMBER, remember);
+
+        editor.commit();
+    }
+
+    private void clearPreferences() {
+        SharedPreferences.Editor editor = settings.edit();
+
+        editor.putString(USERNAME, "");
+        editor.putString(PASSWORD, "");
+        editor.putBoolean(REMEMBER, false);
+
+        editor.commit();
     }
 
 }

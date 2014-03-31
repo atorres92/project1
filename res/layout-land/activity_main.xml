@@ -67,14 +67,15 @@
                 android:text="@string/login"
                 android:id="@+id/loginButton" android:layout_below="@+id/frameSpacer"
                 android:layout_alignLeft="@+id/usernameLabel" android:layout_alignStart="@+id/usernameLabel"
-                android:focusable="false" android:layout_toLeftOf="@+id/createAccountButton" android:textSize="15sp"/>
+                android:focusable="false" android:layout_toLeftOf="@+id/createAccountButton" android:textSize="15sp"
+                android:onClick="onLogin"/>
         <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/createaccount"
                 android:id="@+id/createAccountButton" android:layout_alignTop="@+id/loginButton"
                 android:layout_alignRight="@+id/passwordText" android:layout_alignEnd="@+id/passwordText"
-                android:textSize="15sp"/>
+                android:textSize="15sp" android:onClick="onCreateAccount"/>
         <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
