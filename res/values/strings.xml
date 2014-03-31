@@ -21,5 +21,9 @@
     <string name="Player1Score">Winner! Player 1: 5</string>
     <string name="Player2Score">Loser! Player 2: 3</string>
     <string name="endGame">End</string>
+    <string name="username">Username:</string>
+    <string name="password">Password:</string>
+    <string name="login">Login</string>
+    <string name="createaccount">Create Account</string>
 
 </resources>

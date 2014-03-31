@@ -2,8 +2,8 @@ package edu.msu.comfortablynumb.project1;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,8 +16,11 @@ public class MainActivity extends Activity {
 	static final String PLAYER_TWO_NAME = "PLAYER_TWO_NAME";
     static final String ENTER_PLAYER_NAME = "Please Enter Names";
     static final String NAMES = "NAMES";
-    EditText playerOneText;
-    EditText playerTwoText;
+	static final String USERNAME = "USERNAME";
+	static final String PASSWORD = "PASSWORD";
+    static final String LOGIN_FAILED = "Login Failed";
+    EditText usernameText;
+    EditText passwordText;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +28,8 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
         setTitle("Comfortably Numb");
 
-        playerOneText = (EditText) findViewById(R.id.player1Input);
-        playerTwoText = (EditText) findViewById(R.id.player2Input);
+        usernameText = (EditText) findViewById(R.id.usernameText);
+        passwordText = (EditText) findViewById(R.id.passwordText);
 
         if ( savedInstanceState != null ) {
             loadInstanceState(savedInstanceState);
@@ -67,6 +70,25 @@ public class MainActivity extends Activity {
         }
 	}
 
+    public void onLogin(View view) {
+        Log.i("Clicked login button", "A1234");
+
+        if ( !usernameText.getText().toString().equals("") && !passwordText.getText().toString().equals("") ) {
+            //
+            //
+            //Server code here
+            //
+            //
+        } else {
+            Toast.makeText(this, LOGIN_FAILED, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void onCreateAccount(View view) {
+        Log.i("Clicked create account button", "A1234");
+    }
+
+    /*
 	public void onStartGame(View view) {
         if ( playerOneText.getText() != null && playerTwoText.getText() != null && getApplicationContext() != null ) {
             if (playerOneText.getText().toString().matches("") || playerTwoText.getText().toString().matches("")) {
@@ -86,6 +108,7 @@ public class MainActivity extends Activity {
             }
         }
 	}
+	*/
 
     /**
      * Save the names to a bundle
@@ -93,15 +116,15 @@ public class MainActivity extends Activity {
      */
     @Override
     protected void onSaveInstanceState(Bundle bundle) {
-        super.onSaveInstanceState( bundle );
+        super.onSaveInstanceState(bundle);
 
-        String [] names = new String[Game.PLAYERS];
-
-        if (playerOneText.getText() != null && playerTwoText.getText() != null ) {
-            names[Game.PLAYER_ONE] = playerOneText.getText().toString();
-            names[Game.PLAYER_TWO] = playerTwoText.getText().toString();
-            bundle.putStringArray(NAMES, names);
+        if (usernameText.getText() != null && passwordText.getText() != null ) {
+            String username = usernameText.getText().toString();
+            String password =  passwordText.getText().toString();
+            bundle.putString(USERNAME, username);
+            bundle.putString(PASSWORD, password);
         }
+
     }
 
     /**
@@ -109,10 +132,12 @@ public class MainActivity extends Activity {
      * @param bundle The bundle we save to
      */
     public void loadInstanceState(Bundle bundle) {
-        String [] names = bundle.getStringArray(NAMES);
-        if ( names != null ) {
-            playerOneText.setText(names[Game.PLAYER_ONE]);
-            playerTwoText.setText(names[Game.PLAYER_TWO]);
+        String username = bundle.getString(USERNAME);
+        String password = bundle.getString(PASSWORD);
+
+        if ( username != null && password != null ) {
+            usernameText.setText(username);
+            passwordText.setText(password);
         }
     }
 

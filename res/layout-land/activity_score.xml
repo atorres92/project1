@@ -50,7 +50,6 @@
             android:id="@+id/winnerText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/player2Label"
             android:layout_alignParentTop="true"
             android:gravity="center"
             android:text="@string/Player1Score"

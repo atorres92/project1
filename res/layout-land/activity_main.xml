@@ -29,48 +29,52 @@
             android:layout_centerInParent="true" android:paddingRight="100dp" android:padding="25dp">
 
         </FrameLayout>
-
-        <EditText
-            android:id="@+id/player1Input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:ems="10"
-            android:layout_above="@+id/player2Input" android:layout_toRightOf="@+id/player1Label"/>
-
-        <EditText
-            android:id="@+id/player2Input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:ems="10"
-            android:layout_above="@+id/frameSpacer" android:layout_toRightOf="@+id/player2Label"/>
-
         <TextView
-            android:id="@+id/player1Label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/player1"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_above="@+id/player2Input" android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/username"
+                android:id="@+id/usernameLabel"
+                android:layout_above="@+id/frameSpacer" android:layout_toLeftOf="@+id/frameSpacer"
+                android:textSize="15sp"/>
         <TextView
-            android:id="@+id/player2Label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/player2"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_alignBottom="@+id/player2Input" android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"/>
-
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/password"
+                android:id="@+id/textView2" android:layout_centerVertical="true"
+                android:layout_alignRight="@+id/usernameLabel" android:layout_alignEnd="@+id/passwordLabel"
+                android:textSize="15sp"/>
+        <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:ems="10"
+                android:id="@+id/passwordText"
+                android:layout_centerVertical="true"
+                android:layout_alignBottom="@+id/textView2"
+                android:layout_toRightOf="@+id/usernameLabel"/>
+        <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/usernameText"
+                android:layout_alignBottom="@+id/usernameLabel"
+                android:layout_toRightOf="@+id/usernameLabel" android:layout_alignRight="@+id/passwordText"
+                android:layout_alignEnd="@+id/passwordText"/>
         <Button
-            android:id="@+id/endGame"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:onClick="onStartGame"
-            android:text="@string/startgame" android:textSize="15sp" android:padding="25dp"
-            android:layout_below="@+id/frameSpacer" android:layout_centerHorizontal="true"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/login"
+                android:id="@+id/loginButton" android:layout_below="@+id/frameSpacer"
+                android:layout_alignLeft="@+id/usernameLabel" android:layout_alignStart="@+id/usernameLabel"
+                android:focusable="false" android:layout_toLeftOf="@+id/createAccountButton" android:textSize="15sp"/>
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/createaccount"
+                android:id="@+id/createAccountButton" android:layout_alignTop="@+id/loginButton"
+                android:layout_alignRight="@+id/passwordText" android:layout_alignEnd="@+id/passwordText"
+                android:textSize="15sp"/>
 
     </RelativeLayout>
 
