@@ -25,7 +25,9 @@
     <string name="password">Password:</string>
     <string name="login">Login</string>
     <string name="createaccount">Create Account</string>
-    <string name="remember">Remember</string><string name="confirmpassword">Confirm Password:</string><string name="waitingscreen">Waiting for second player...</string>
+    <string name="remember">Remember</string>
+    <string name="confirmpassword">Confirm Password:</string>
+    <string name="waitingscreen">Waiting for second player &#8230;</string>
     <string name="create_fail">Create Account Failed</string>
 
 </resources>

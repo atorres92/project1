@@ -1,15 +1,9 @@
 package edu.msu.comfortablynumb.project1;
-
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import android.app.Activity;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Xml;
@@ -81,7 +75,8 @@ public class CreateAccountActivity extends Activity {
                             xml.nextTag();      // Advance to first tag
                             xml.require(XmlPullParser.START_TAG, null, "brick");
                             String status = xml.getAttributeValue(null, "status");
-                            Log.i("Stream","status");
+                            Log.i("status", status);
+
 
 
                         } catch(IOException ex) {

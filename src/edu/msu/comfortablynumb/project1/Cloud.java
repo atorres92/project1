@@ -164,7 +164,11 @@ public class Cloud {
 
 
         // Create a get query
-        String query = CREATE_URL + "?user=" + username + "&magic=" + MAGIC + "&pw=" + password;
+        String query = null;
+        if(newuser == true)
+            query = CREATE_URL + "?user=" + username + "&magic=" + MAGIC + "&pw=" + password;
+        else
+        	query = LOGON_URL + "?user=" + username + "&magic=" + MAGIC + "&pw=" + password;
 
         try {
             URL url = new URL(query);
@@ -176,7 +180,7 @@ public class Cloud {
             }
 
             InputStream stream = conn.getInputStream();
-            logStream(stream);
+            //logStream(stream);
             return stream;
 
         } catch (MalformedURLException e) {

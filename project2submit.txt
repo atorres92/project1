@@ -7,7 +7,7 @@ When you have completed the project, complete the following form and include it 
 
 For the Checkpoint, Describe a sequence of operations to create a new account and log onto the server: 
 
-1. Click "Create Accountâ" Button
+1. Click "Create Account" Button
 2. Enter username you want.
 3. Enter password you want.
 4. Confirm your password
@@ -35,9 +35,9 @@ https://www.cse.msu.edu/~patelke6/cse476/brick-create.php
 
 
 
-Member 3: 
+Member 3: Anthony Russel
 
-Responsiblity:
+Responsibility: Created the could class to handle client side interactions. Create the threading functions for create new user and for logging into the app.
 
 
 

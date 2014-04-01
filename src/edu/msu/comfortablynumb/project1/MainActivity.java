@@ -1,11 +1,18 @@
 package edu.msu.comfortablynumb.project1;
 
+import java.io.IOException;
+import java.io.InputStream;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Xml;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,6 +43,14 @@ public class MainActivity extends Activity {
     CheckBox checkbox;
     boolean remember = false;
     SharedPreferences settings;
+    private final DrawToast drawable= new DrawToast();
+
+    private class DrawToast{
+    	public boolean drawToast = false;
+    }
+    private void makeToast(){
+    	Toast.makeText(MainActivity.this, INVALID_USER_PASS, Toast.LENGTH_SHORT).show();
+    }
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -100,17 +115,75 @@ public class MainActivity extends Activity {
             } else {
                 clearPreferences();
             }
-            //Dummy activity code.  Goes to waiting screen
-            Intent intent = new Intent(this, WaitingActivity.class);
-            startActivity(intent);
-            //
 
+            //
 
             //
             //
             //Server code here, if invalid username or password, use: Toast.makeText(this, INVALID_USER_PASS, Toast.LENGTH_SHORT).show();
             //
             //
+
+
+
+            // Create a thread to create a new login
+            new Thread(new Runnable() {
+
+                /**
+                 * Save the hatting in the background
+                 */
+                @Override
+                public void run() {
+                    Cloud cloud = new Cloud();
+                    InputStream stream = cloud.createOnCloud(usernameText.getText().toString(), passwordText.getText().toString(), false);
+
+                    // Test for an error
+                    boolean fail = stream == null;
+                    if(!fail) {
+                        try {
+                            XmlPullParser xml = Xml.newPullParser();
+                            xml.setInput(stream, "UTF-8");
+
+
+                            xml.nextTag();      // Advance to first tag
+                            xml.require(XmlPullParser.START_TAG, null, "brick");
+                            String status = xml.getAttributeValue(null, "status");
+                            String id = xml.getAttributeValue(null, "id");
+                            Log.i("ID", id);
+
+                            if(status.equalsIgnoreCase("yes")){
+                            	//Dummy activity code.  Goes to waiting screen
+                            	Intent intent = new Intent(MainActivity.this, WaitingActivity.class);
+                            	startActivity(intent);
+                            	finish();
+                            }
+                            else{
+                            	drawable.drawToast =true;
+                            }
+
+
+
+
+                        } catch(IOException ex) {
+                            fail = true;
+                        } catch(XmlPullParserException ex) {
+                        	Log.i("ex:", ex.getMessage());
+                            fail = true;
+                        } finally {
+                            try {
+                                stream.close();
+                            } catch(IOException ex) {
+                            	Log.i("Message",ex.getMessage());
+                            }
+                        }
+                    }
+                }
+
+
+
+            }).start();
+
+
 
 
         } else {
@@ -217,5 +290,19 @@ public class MainActivity extends Activity {
 
         editor.commit();
     }
+
+	@Override
+	public void onUserInteraction() {
+		// TODO Auto-generated method stub
+		super.onUserInteraction();
+
+		if(drawable.drawToast){
+			drawable.drawToast = false;
+			makeToast();
+		}
+	}
+
+
+
 
 }
