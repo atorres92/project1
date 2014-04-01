@@ -7,7 +7,7 @@ When you have completed the project, complete the following form and include it 
 
 For the Checkpoint, Describe a sequence of operations to create a new account and log onto the server: 
 
-1. Click “Create Account” Button
+1. Click "Create Account�" Button
 2. Enter username you want.
 3. Enter password you want.
 4. Confirm your password
@@ -23,9 +23,15 @@ Responsiblity: The opening activity and the new user activity.  Created layout f
 
 
 
-Member 2: 
+Member 2: Keyur Patel
 
-Responsiblity:
+Responsiblity: Created all the php files for communicating with the server. 
+
+This returns the id for the user if the username and password exist in the database.
+https://www.cse.msu.edu/~patelke6/cse476/brick-login.php
+
+This returns a status yes if the user was created successfully. 
+https://www.cse.msu.edu/~patelke6/cse476/brick-create.php
 
 
 
@@ -38,6 +44,7 @@ Responsiblity:
 Member 4 (if applicable): N/A
 
 Responsiblity: N/A
+
 
 
 Provide instructions on how to reach the first editing activity if the login button is not yet functional.
