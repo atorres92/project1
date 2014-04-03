@@ -149,7 +149,8 @@ public class MainActivity extends Activity {
                             xml.require(XmlPullParser.START_TAG, null, "brick");
                             String status = xml.getAttributeValue(null, "status");
                             String id = xml.getAttributeValue(null, "id");
-                            Log.i("ID", id);
+                            if(id != null)
+                            	Log.i("ID", id);
 
                             if(status.equalsIgnoreCase("yes")){
                             	//Dummy activity code.  Goes to waiting screen
@@ -158,7 +159,13 @@ public class MainActivity extends Activity {
                             	finish();
                             }
                             else{
-                            	drawable.drawToast =true;
+
+                            	MainActivity.this.runOnUiThread(new Runnable() {
+                            	    public void run() {
+                            	    	drawable.drawToast =true;
+                            	    }
+                            	});
+
                             }
 
 
