@@ -11,6 +11,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.util.Xml;
 import android.view.Menu;
@@ -43,14 +44,8 @@ public class MainActivity extends Activity {
     CheckBox checkbox;
     boolean remember = false;
     SharedPreferences settings;
-    private final DrawToast drawable= new DrawToast();
-
-    private class DrawToast{
-    	public boolean drawToast = false;
-    }
-    private void makeToast(){
-    	Toast.makeText(MainActivity.this, INVALID_USER_PASS, Toast.LENGTH_SHORT).show();
-    }
+    private Handler toastHandler;
+    private Runnable toastRunnable;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +56,13 @@ public class MainActivity extends Activity {
         usernameText = (EditText) findViewById(R.id.usernameText);
         passwordText = (EditText) findViewById(R.id.passwordText);
         checkbox = (CheckBox) findViewById(R.id.checkBox);
+
+        toastHandler = new Handler();
+        toastRunnable = new Runnable() {
+            public void run() {
+                Toast.makeText(MainActivity.this, INVALID_USER_PASS, Toast.LENGTH_SHORT).show();
+            }
+        };
 
         settings = getSharedPreferences(PREFERENCES, MODE_PRIVATE);
         readPreferences();
@@ -116,16 +118,6 @@ public class MainActivity extends Activity {
                 clearPreferences();
             }
 
-            //
-
-            //
-            //
-            //Server code here, if invalid username or password, use: Toast.makeText(this, INVALID_USER_PASS, Toast.LENGTH_SHORT).show();
-            //
-            //
-
-
-
             // Create a thread to create a new login
             new Thread(new Runnable() {
 
@@ -159,17 +151,8 @@ public class MainActivity extends Activity {
                             	finish();
                             }
                             else{
-
-                            	MainActivity.this.runOnUiThread(new Runnable() {
-                            	    public void run() {
-                            	    	drawable.drawToast =true;
-                            	    }
-                            	});
-
+                                toastHandler.post(toastRunnable);
                             }
-
-
-
 
                         } catch(IOException ex) {
                             fail = true;
@@ -185,12 +168,7 @@ public class MainActivity extends Activity {
                         }
                     }
                 }
-
-
-
             }).start();
-
-
 
 
         } else {
@@ -297,18 +275,6 @@ public class MainActivity extends Activity {
 
         editor.commit();
     }
-
-	@Override
-	public void onUserInteraction() {
-		// TODO Auto-generated method stub
-		super.onUserInteraction();
-
-		if(drawable.drawToast){
-			drawable.drawToast = false;
-			makeToast();
-		}
-	}
-
 
 
 

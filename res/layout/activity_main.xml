@@ -48,14 +48,16 @@
             android:layout_height="wrap_content"
             android:inputType="text"
             android:layout_above="@+id/passwordText" android:layout_toRightOf="@+id/usernameLabel"
-            android:layout_alignRight="@+id/imageView" android:layout_alignEnd="@+id/imageView"/>
+            android:layout_alignRight="@+id/imageView" android:layout_alignEnd="@+id/imageView"
+            />
     <Button
         android:id="@+id/createAccountButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/createaccount"
         android:layout_below="@+id/passwordText" android:layout_alignRight="@+id/imageView"
-        android:layout_alignEnd="@+id/imageView" android:onClick="onCreateAccount"/>
+        android:layout_alignEnd="@+id/imageView" android:onClick="onCreateAccount" android:textSize="15sp"
+        android:layout_toRightOf="@+id/frameSpacer"/>
     <Button
         android:id="@+id/loginButton"
         android:layout_width="wrap_content"
@@ -69,8 +71,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/imageView" android:src="@drawable/stacker1" android:layout_gravity="right|center_vertical"
             android:contentDescription="@string/stackerdescription"
-            android:paddingTop="35dp"
-            android:layout_above="@+id/usernameText" android:layout_centerHorizontal="true"/>
+            android:paddingBottom="10dp" android:layout_above="@+id/usernameText"
+            android:layout_centerHorizontal="true"/>
     <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
