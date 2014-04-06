@@ -112,10 +112,10 @@ public class WaitingActivity extends Activity {
                                 xml.nextTag();      // Advance to first tag
                                 xml.require(XmlPullParser.START_TAG, null, "brick");
                                 String status = xml.getAttributeValue(null, "status");
-                                secondPlayerId = xml.getAttributeValue(null, "id");
+                                secondPlayerId = xml.getAttributeValue(null, "secondplayerid");
                                 if(id != null)
-                                	Log.i("ID", id);
-                                secondPlayerUsername = xml.getAttributeValue(null, "secondplayer");
+                                	Log.i("ID", secondPlayerId);
+                                secondPlayerUsername = xml.getAttributeValue(null, "secondplayername");
 
                                 if(status.equalsIgnoreCase("yes")){
                                 	secondPlayerConnected = true;
@@ -141,6 +141,7 @@ public class WaitingActivity extends Activity {
                         if (secondPlayerConnected) {
                             Log.i("Connected", "Second Player Connected! Going to GameActivity...");
 
+                            stopThread = true;
                             //Go to GameActivity
                             Intent intent = new Intent(WaitingActivity.this, GameActivity.class);
                             intent.putExtra(MainActivity.USERNAME, username);
