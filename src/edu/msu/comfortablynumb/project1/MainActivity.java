@@ -34,7 +34,8 @@ public class MainActivity extends Activity {
 
     private static final String PREFERENCES = "preferences";
 
-	static final String USERNAME = "USERNAME";
+	public static final String USERNAME = "USERNAME";
+    public static final String USER_ID = "USER_ID";
 	static final String PASSWORD = "PASSWORD";
     static final String REMEMBER = "REMEMBER";
     static final String FILL_INFO = "Please fill out the forms";
@@ -145,8 +146,10 @@ public class MainActivity extends Activity {
                             	Log.i("ID", id);
 
                             if(status.equalsIgnoreCase("yes")){
-                            	//Dummy activity code.  Goes to waiting screen
-                            	Intent intent = new Intent(MainActivity.this, WaitingActivity.class);
+                                //Close MainActivity and open WaitingActivity
+                                getIntent().putExtra( USERNAME, usernameText.getText().toString() );
+                                getIntent().putExtra( USER_ID, id );
+                                Intent intent = new Intent(MainActivity.this, WaitingActivity.class);
                             	startActivity(intent);
                             	finish();
                             }
