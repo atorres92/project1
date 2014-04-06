@@ -113,8 +113,9 @@ public class WaitingActivity extends Activity {
                                 xml.require(XmlPullParser.START_TAG, null, "brick");
                                 String status = xml.getAttributeValue(null, "status");
                                 secondPlayerId = xml.getAttributeValue(null, "secondplayerid");
-                                if(id != null)
-                                	Log.i("ID", secondPlayerId);
+                                if(id != null) {
+                                	Log.i("ID", "" + secondPlayerId);
+                                }
                                 secondPlayerUsername = xml.getAttributeValue(null, "secondplayername");
 
                                 if(status.equalsIgnoreCase("yes")){
@@ -161,7 +162,6 @@ public class WaitingActivity extends Activity {
                 }
             }
         }).start();
-        Log.i("Exited thread", "Exited Thread");
 
     }
 
