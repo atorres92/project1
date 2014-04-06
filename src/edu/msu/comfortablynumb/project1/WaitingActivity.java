@@ -71,13 +71,13 @@ public class WaitingActivity extends Activity {
                                 xml.nextTag();      // Advance to first tag
                                 xml.require(XmlPullParser.START_TAG, null, "brick");
                                 String status = xml.getAttributeValue(null, "status");
-                                String id = xml.getAttributeValue(null, "id");
+                                secondPlayerId = xml.getAttributeValue(null, "id");
                                 if(id != null)
                                 	Log.i("ID", id);
-                                String otherUser = xml.getAttributeValue(null, "otherUser");
+                                secondPlayerUsername = xml.getAttributeValue(null, "secondplayer");
 
                                 if(status.equalsIgnoreCase("yes")){
-                                	secondPlayerConnected = false;
+                                	secondPlayerConnected = true;
                                 }
 
 
