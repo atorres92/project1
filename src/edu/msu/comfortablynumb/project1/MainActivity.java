@@ -40,6 +40,8 @@ public class MainActivity extends Activity {
     static final String REMEMBER = "REMEMBER";
     static final String FILL_INFO = "Please fill out the forms";
     static final String INVALID_USER_PASS = "Invalid Username or Password";
+    public static final String USERNAME_2 = "USERNAME_2";
+    public static final String USER_ID_2 = "USER_ID_2";
     EditText usernameText;
     EditText passwordText;
     CheckBox checkbox;
@@ -147,10 +149,10 @@ public class MainActivity extends Activity {
 
                             if(status.equalsIgnoreCase("yes")){
                                 //Close MainActivity and open WaitingActivity
-                                getIntent().putExtra( USERNAME, usernameText.getText().toString() );
-                                getIntent().putExtra( USER_ID, id );
                                 Intent intent = new Intent(MainActivity.this, WaitingActivity.class);
-                            	startActivity(intent);
+                                intent.putExtra( USERNAME, usernameText.getText().toString() );
+                                intent.putExtra( USER_ID, id );
+                                startActivity(intent);
                             	finish();
                             }
                             else{

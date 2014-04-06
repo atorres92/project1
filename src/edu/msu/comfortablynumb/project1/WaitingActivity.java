@@ -12,7 +12,8 @@ public class WaitingActivity extends Activity {
 
     private String id;
     private String username;
-
+    private String secondPlayerId;
+    private String secondPlayerUsername;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,11 +54,15 @@ public class WaitingActivity extends Activity {
 
                         if (secondPlayerConnected) {
                             Log.i("Connected", "Second Player Connected! Going to GameActivity...");
-                            //Leave waiting screen
 
-                            //Open GameActivity here
-                            //
-
+                            //Go to GameActivity
+                            Intent intent = new Intent(WaitingActivity.this, GameActivity.class);
+                            intent.putExtra(MainActivity.USERNAME, username);
+                            intent.putExtra(MainActivity.USER_ID, id);
+                            intent.putExtra(MainActivity.USERNAME_2, secondPlayerUsername);
+                            intent.putExtra(MainActivity.USER_ID_2, secondPlayerId);
+                            startActivity(intent);
+                            finish();
 
                         } else {
                             Thread.sleep(3000);
