@@ -1,16 +1,18 @@
 package edu.msu.comfortablynumb.project1;
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Xml;
+import android.view.Menu;
+import android.view.MenuItem;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by Aaron on 3/31/14.
@@ -21,6 +23,8 @@ public class WaitingActivity extends Activity {
     private String username;
     private String secondPlayerId;
     private String secondPlayerUsername;
+
+    private volatile boolean stopThread = false;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +37,44 @@ public class WaitingActivity extends Activity {
         checkForSecondPlayer();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    /**
+     * Called when options button selected
+     * @param item a menu item to use
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.game_help:
+                // The puzzle is done
+                // Instantiate a dialog box builder
+                AlertDialog.Builder builder = new AlertDialog.Builder(WaitingActivity.this);
+
+                // Parameterize the builder
+                builder.setTitle(R.string.howtoplay);
+                builder.setMessage(R.string.howtotext);
+                builder.setPositiveButton(android.R.string.ok, null);
+
+                // Create the dialog box and show it
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+                return true;
+
+            case R.id.exit_game:
+                //Exit the game
+                stopThread = true;
+                finish();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     public void checkForSecondPlayer() {
 
@@ -40,8 +82,7 @@ public class WaitingActivity extends Activity {
             @Override
             public void run() {
                 try {
-                    while(true) {
-
+                    while(!stopThread) {
                         boolean secondPlayerConnected = false;
 
 
@@ -113,11 +154,13 @@ public class WaitingActivity extends Activity {
                             Thread.sleep(3000);
                         }
                     }
+
                 } catch( Exception e ) {
                     e.printStackTrace();
                 }
             }
         }).start();
+        Log.i("Exited thread", "Exited Thread");
 
     }
 

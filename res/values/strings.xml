@@ -29,5 +29,6 @@
     <string name="confirmpassword">Confirm Password:</string>
     <string name="waitingscreen">Waiting for second player &#8230;</string>
     <string name="create_fail">Create Account Failed</string>
+    <string name="exitgame">Exit Game</string>
 
 </resources>

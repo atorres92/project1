@@ -3,6 +3,8 @@ package edu.msu.comfortablynumb.project1;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -34,7 +36,32 @@ public class ScoreActivity extends Activity {
         }
     }
 
-	public void onRestartGame(View view) {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    /**
+     * Called when options button selected
+     * @param item a menu item to use
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case R.id.exit_game:
+                //Exit the game
+                finish();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+    public void onRestartGame(View view) {
         view.invalidate();
 		Intent intent = new Intent(this, MainActivity.class);
 		startActivity(intent);

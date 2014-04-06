@@ -90,23 +90,28 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case R.id.game_help:
-            // The puzzle is done
-            // Instantiate a dialog box builder
-            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            case R.id.game_help:
+                // The puzzle is done
+                // Instantiate a dialog box builder
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
-            // Parameterize the builder
-            builder.setTitle(R.string.howtoplay);
-            builder.setMessage(R.string.howtotext);
-            builder.setPositiveButton(android.R.string.ok, null);
+                // Parameterize the builder
+                builder.setTitle(R.string.howtoplay);
+                builder.setMessage(R.string.howtotext);
+                builder.setPositiveButton(android.R.string.ok, null);
 
-            // Create the dialog box and show it
-            AlertDialog alertDialog = builder.create();
-            alertDialog.show();
-            return true;
+                // Create the dialog box and show it
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+                return true;
 
-        default:
-            return super.onOptionsItemSelected(item);
+            case R.id.exit_game:
+                //Exit the game
+                finish();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
 	}
 
@@ -150,8 +155,8 @@ public class MainActivity extends Activity {
                             if(status.equalsIgnoreCase("yes")){
                                 //Close MainActivity and open WaitingActivity
                                 Intent intent = new Intent(MainActivity.this, WaitingActivity.class);
-                                intent.putExtra( USERNAME, usernameText.getText().toString() );
-                                intent.putExtra( USER_ID, id );
+                                intent.putExtra(USERNAME, usernameText.getText().toString());
+                                intent.putExtra(USER_ID, id);
                                 startActivity(intent);
                             	finish();
                             }
@@ -280,7 +285,6 @@ public class MainActivity extends Activity {
 
         editor.commit();
     }
-
 
 
 }
