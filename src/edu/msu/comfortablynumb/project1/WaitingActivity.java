@@ -1,9 +1,16 @@
 package edu.msu.comfortablynumb.project1;
 
+import java.io.IOException;
+import java.io.InputStream;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Xml;
 
 /**
  * Created by Aaron on 3/31/14.
@@ -50,6 +57,44 @@ public class WaitingActivity extends Activity {
                         //
 
                         Log.i("Polling Server...", "Polling Server...");
+
+                        Cloud cloud = new Cloud();
+                        InputStream stream = cloud.pollWaiting(username, id);
+                        // Test for an error
+                        boolean fail = stream == null;
+
+                        if(!fail) {
+                            try {
+                                XmlPullParser xml = Xml.newPullParser();
+                                xml.setInput(stream, "UTF-8");
+
+                                xml.nextTag();      // Advance to first tag
+                                xml.require(XmlPullParser.START_TAG, null, "brick");
+                                String status = xml.getAttributeValue(null, "status");
+                                String id = xml.getAttributeValue(null, "id");
+                                if(id != null)
+                                	Log.i("ID", id);
+                                String otherUser = xml.getAttributeValue(null, "otherUser");
+
+                                if(status.equalsIgnoreCase("yes")){
+                                	secondPlayerConnected = false;
+                                }
+
+
+
+                            } catch(IOException ex) {
+                                fail = true;
+                            } catch(XmlPullParserException ex) {
+                            	Log.i("ex:", ex.getMessage());
+                                fail = true;
+                            } finally {
+                                try {
+                                    stream.close();
+                                } catch(IOException ex) {
+                                	Log.i("Message",ex.getMessage());
+                                }
+                            }
+                        }
 
 
                         if (secondPlayerConnected) {
