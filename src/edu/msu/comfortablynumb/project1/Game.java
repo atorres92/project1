@@ -131,8 +131,8 @@ public class Game {
 
     public void updateScore() {
         if (gameActivity != null) {
-            gameActivity.getPlayerOneScoreView().setText(gameActivity.getPlayerOneName() + ":" + playerOneScore);
-            gameActivity.getPlayerTwoScoreView().setText(gameActivity.getPlayerTwoName() + ":" + playerTwoScore);
+            gameActivity.getPlayerScoreView().setText(gameActivity.getPlayerName() + ":" + playerOneScore);
+            gameActivity.getSecondPlayerScoreView().setText(gameActivity.getSecondPlayerName() + ":" + playerTwoScore);
         }
     }
 
@@ -352,9 +352,9 @@ public class Game {
         updateScore();
 		//Someone wins when they get 3 points
 		if(playerOneScore >= 5 ) {
-            gameActivity.onEndGame(blockView, MainActivity.PLAYER_ONE_NAME);
+            gameActivity.onEndGame(blockView, MainActivity.PLAYER_NAME);
         } else if ( playerTwoScore >= 5) {
-            gameActivity.onEndGame(blockView, MainActivity.PLAYER_TWO_NAME);
+            gameActivity.onEndGame(blockView, MainActivity.SECOND_PLAYER_NAME);
         }
 
 		blocks.clear();

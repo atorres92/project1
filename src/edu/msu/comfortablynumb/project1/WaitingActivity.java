@@ -67,7 +67,12 @@ public class WaitingActivity extends Activity {
 
             case R.id.exit_game:
                 //Exit the game
+                /*!
+                 * Possible memory leak?
+                 */
+                Log.i("Check Memory", "Check Memory");
                 stopThread = true;
+                exitApplication();
                 finish();
                 return true;
 
@@ -75,6 +80,13 @@ public class WaitingActivity extends Activity {
                 return super.onOptionsItemSelected(item);
         }
     }
+    public void exitApplication() {
+        //TODO server code:
+        /*
+         * Server code here to tell database that I'm no longer connected
+         */
+    }
+
 
     public void checkForSecondPlayer() {
 
@@ -120,6 +132,8 @@ public class WaitingActivity extends Activity {
 
                                 if(status.equalsIgnoreCase("yes")){
                                 	secondPlayerConnected = true;
+                                    Log.i("Second player found! Username: %s", secondPlayerUsername);
+                                    Log.i("UserId of second player: %s", secondPlayerId);
                                 }
 
 

@@ -26,8 +26,8 @@ public class MainActivity extends Activity {
     /*
      * DELETE THIS LATER!!!!!!
      */
-	static final String PLAYER_ONE_NAME = "PLAYER_ONE_NAME";
-	static final String PLAYER_TWO_NAME = "PLAYER_TWO_NAME";
+	static final String PLAYER_NAME = "PLAYER_NAME";
+	static final String SECOND_PLAYER_NAME = "SECOND_PLAYER_NAME";
     static final String ENTER_PLAYER_NAME = "Please Enter Names";
     static final String NAMES = "NAMES";
     //////////////////////////////////////
@@ -205,8 +205,8 @@ public class MainActivity extends Activity {
 
                 Intent intent = new Intent(this, GameActivity.class);
 
-                intent.putExtra(PLAYER_ONE_NAME, playerOneName);
-                intent.putExtra(PLAYER_TWO_NAME, playerTwoName);
+                intent.putExtra(PLAYER_NAME, playerOneName);
+                intent.putExtra(SECOND_PLAYER_NAME, playerTwoName);
 
                 startActivity(intent);
                 finish();

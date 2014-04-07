@@ -2,8 +2,11 @@ package edu.msu.comfortablynumb.project1;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -12,11 +15,11 @@ public class GameActivity extends Activity {
 
 	private BlockView blockView;
 
-	private TextView playerOneScoreView;
-    private TextView playerTwoScoreView;
+	private TextView playerScoreView;
+    private TextView secondPlayerScoreView;
 
-    private String playerOneName;
-    private String playerTwoName;
+    private String playerName;
+    private String secondPlayerName;
 
     public static final String NAMES = "GameActivity.names";
     public static final String WINNER = "GameActivity.winner";
@@ -37,13 +40,59 @@ public class GameActivity extends Activity {
 
         // Grab player names and scores
         Intent intent = this.getIntent();
-        setPlayerOneName(intent.getStringExtra(MainActivity.PLAYER_ONE_NAME));
-        setPlayerTwoName(intent.getStringExtra(MainActivity.PLAYER_TWO_NAME));
-        setPlayerOneScoreView( (TextView)this.findViewById(R.id.playerOneScore) );
-        setPlayerTwoScoreView((TextView) this.findViewById(R.id.playerTwoScore));
+        setPlayerName(intent.getStringExtra(MainActivity.USERNAME));
+        setSecondPlayerName(intent.getStringExtra(MainActivity.USERNAME_2));
+        setPlayerScoreView((TextView) this.findViewById(R.id.playerOneScore));
+        setSecondPlayerScoreView((TextView) this.findViewById(R.id.playerTwoScore));
 
         //send activity to blockView so it can grab player names and scores
         blockView.setGameActivity(this);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    /**
+     * Called when options button selected
+     * @param item a menu item to use
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.game_help:
+                // The puzzle is done
+                // Instantiate a dialog box builder
+                AlertDialog.Builder builder = new AlertDialog.Builder(GameActivity.this);
+
+                // Parameterize the builder
+                builder.setTitle(R.string.howtoplay);
+                builder.setMessage(R.string.howtotext);
+                builder.setPositiveButton(android.R.string.ok, null);
+
+                // Create the dialog box and show it
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+                return true;
+
+            case R.id.exit_game:
+                //Exit the game
+                exitApplication();
+                finish();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void exitApplication() {
+        //TODO server code:
+        /*
+         * Server code here to tell database that I'm no longer connected
+         */
     }
 
 	public void onWeightSelected(View view){
@@ -66,12 +115,12 @@ public class GameActivity extends Activity {
 	public void onEndGame(View view, String winner) {
  		Intent intent = new Intent(this, ScoreActivity.class);
 
-        if ( winner == MainActivity.PLAYER_ONE_NAME ) {
-            intent.putExtra(WINNER, playerOneScoreView.getText().toString());
-            intent.putExtra(LOSER, playerTwoScoreView.getText().toString());
+        if ( winner == MainActivity.PLAYER_NAME) {
+            intent.putExtra(WINNER, playerScoreView.getText().toString());
+            intent.putExtra(LOSER, secondPlayerScoreView.getText().toString());
         } else {
-            intent.putExtra(WINNER, playerTwoScoreView.getText().toString());
-            intent.putExtra(LOSER, playerOneScoreView.getText().toString());
+            intent.putExtra(WINNER, secondPlayerScoreView.getText().toString());
+            intent.putExtra(LOSER, playerScoreView.getText().toString());
         }
 
 		startActivity(intent);
@@ -95,8 +144,8 @@ public class GameActivity extends Activity {
         super.onSaveInstanceState(bundle);
 
         String [] names = new String[Game.PLAYERS];
-        names[Game.PLAYER_ONE] = playerOneName;
-        names[Game.PLAYER_TWO] = playerTwoName;
+        names[Game.PLAYER_ONE] = playerName;
+        names[Game.PLAYER_TWO] = secondPlayerName;
         bundle.putStringArray(NAMES, names);
 
         blockView.saveInstanceState(bundle);
@@ -109,39 +158,39 @@ public class GameActivity extends Activity {
     public void loadInstanceState(Bundle bundle) {
         String [] names = bundle.getStringArray(NAMES);
         if ( names != null ) {
-            playerOneName = names[Game.PLAYER_ONE];
-            playerTwoName = names[Game.PLAYER_TWO];
+            playerName = names[Game.PLAYER_ONE];
+            secondPlayerName = names[Game.PLAYER_TWO];
             blockView.loadInstanceState(bundle);
         }
     }
 
-    public TextView getPlayerOneScoreView() { return playerOneScoreView; }
+    public TextView getPlayerScoreView() { return playerScoreView; }
 
-    public void setPlayerOneScoreView(TextView playerOneScoreView) {
-        this.playerOneScoreView = playerOneScoreView;
+    public void setPlayerScoreView(TextView playerScoreView) {
+        this.playerScoreView = playerScoreView;
     }
 
-    public TextView getPlayerTwoScoreView() {
-        return playerTwoScoreView;
+    public TextView getSecondPlayerScoreView() {
+        return secondPlayerScoreView;
     }
 
-    public void setPlayerTwoScoreView(TextView playerTwoScoreView) {
-        this.playerTwoScoreView = playerTwoScoreView;
+    public void setSecondPlayerScoreView(TextView secondPlayerScoreView) {
+        this.secondPlayerScoreView = secondPlayerScoreView;
     }
 
-    public String getPlayerOneName() {
-        return playerOneName;
+    public String getPlayerName() {
+        return playerName;
     }
 
-    public void setPlayerOneName(String playerOneName) {
-        this.playerOneName = playerOneName;
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
     }
 
-    public String getPlayerTwoName() {
-        return playerTwoName;
+    public String getSecondPlayerName() {
+        return secondPlayerName;
     }
 
-    public void setPlayerTwoName(String playerTwoName) {
-        this.playerTwoName = playerTwoName;
+    public void setSecondPlayerName(String secondPlayerName) {
+        this.secondPlayerName = secondPlayerName;
     }
 }
