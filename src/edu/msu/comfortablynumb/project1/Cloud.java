@@ -117,6 +117,46 @@ public class Cloud {
         }
     }
 
+    /**
+     * Save a hatting to the cloud.
+     * This should be run in a thread.
+     * @param name name to save under
+     * @param view view we are getting the data from
+     * @return true if successful
+     */
+    public InputStream pollGame(String username) {
+        username = username.trim();
+        if(username.length() == 0) {
+            return null;
+        }
+
+
+        // Create a get query
+        String query = LOAD_URL + "?user=" + username + "&magic=" + MAGIC;
+
+        try {
+            URL url = new URL(query);
+
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            int responseCode = conn.getResponseCode();
+            if(responseCode != HttpURLConnection.HTTP_OK) {
+                return null;
+            }
+
+            InputStream stream = conn.getInputStream();
+            //logStream(stream);
+            return stream;
+
+        } catch (MalformedURLException e) {
+            // Should never happen
+            return null;
+        } catch (IOException ex) {
+
+            Log.i("Execpetion", ex.getMessage());
+            return null;
+        }
+    }
+
     public static void logStream(InputStream stream) {
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(stream));
