@@ -1,15 +1,17 @@
 package edu.msu.comfortablynumb.project1;
-import java.io.IOException;
-import java.io.InputStream;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.util.Xml;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by Aaron on 3/31/14.
@@ -25,6 +27,10 @@ public class CreateAccountActivity extends Activity {
     static final String USERNAME = "USERNAME";
     static final String PASSWORD = "PASSWORD";
     static final String CONFIRM_PASSWORD = "CONFIRM_PASSWORD";
+    private String ACCOUNT_ALREADY_EXISTS = "Username already exists";
+
+    private Handler toastHandler;
+    private Runnable toastRunnable;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +39,13 @@ public class CreateAccountActivity extends Activity {
         username = (EditText)findViewById(R.id.usernameText);
         password = (EditText)findViewById(R.id.passwordText);
         confirmPassword = (EditText)findViewById(R.id.confirmPasswordText);
+
+        toastHandler = new Handler();
+        toastRunnable = new Runnable() {
+            public void run() {
+                Toast.makeText(CreateAccountActivity.this, ACCOUNT_ALREADY_EXISTS, Toast.LENGTH_LONG).show();
+            }
+        };
 
         if ( savedInstanceState != null ) {
             loadInstanceState(savedInstanceState);
@@ -76,7 +89,9 @@ public class CreateAccountActivity extends Activity {
                             xml.require(XmlPullParser.START_TAG, null, "brick");
                             String status = xml.getAttributeValue(null, "status");
                             Log.i("status", status);
-
+                            if (status.equalsIgnoreCase("no")) {
+                                toastHandler.post(toastRunnable);
+                            }
 
 
                         } catch(IOException ex) {

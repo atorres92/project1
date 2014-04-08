@@ -1,22 +1,19 @@
 package edu.msu.comfortablynumb.project1;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Xml;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlSerializer;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlSerializer;
 
 public class Game {
 
@@ -101,6 +98,8 @@ public class Game {
 	 */
 	private stackStates stackState;
 
+    //If a brick falls, stop polling server to see if second player placed a brick
+    private volatile boolean gameOver = false;
 
 	/**
 	 * last of last relY
@@ -162,7 +161,76 @@ public class Game {
 
 	}
 
-	public void addBlock( View view, int weight, int player){
+    public void waitForOtherPlayer() {
+        //Wait for other player to place their brick
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    while(!gameOver) {
+                        boolean secondPlayerDone = false; //true when second player is done taking their turn.
+
+                        //SERVER CODE HERE:
+                        //
+                        Log.i("Polling Server...", "Polling Server...");
+
+                        Cloud cloud = new Cloud();
+                        InputStream stream = cloud.pollGame(gameActivity.getPlayerName());
+                        // Test for an error
+                        boolean fail = stream == null;
+
+                        if(!fail) {
+                            try {
+                                XmlPullParser xml = Xml.newPullParser();
+                                xml.setInput(stream, "UTF-8");
+
+                                xml.nextTag();      // Advance to first tag
+                                xml.require(XmlPullParser.START_TAG, null, "brick");
+                                String status = xml.getAttributeValue(null, "status");
+
+                                if(status.equalsIgnoreCase("yes")){
+                                    secondPlayerDone = true;
+
+                                    int weight = Integer.parseInt(xml.getAttributeValue(null, "weight"));
+                                    float x = Float.parseFloat(xml.getAttributeValue(null, "x"));
+                                    float y = Float.parseFloat(xml.getAttributeValue(null, "y"));
+                                    int height = Integer.parseInt(xml.getAttributeValue(null, "height"));
+
+                                    Log.i("second player placed a brick.", "second player placed a brick");
+                                }
+
+
+                            } catch(IOException ex) {
+                                fail = true;
+                            } catch(XmlPullParserException ex) {
+                                Log.i("ex:", ex.getMessage());
+                                fail = true;
+                            } finally {
+                                try {
+                                    stream.close();
+                                } catch(IOException ex) {
+                                    Log.i("Message",ex.getMessage());
+                                }
+                            }
+                        }
+
+
+                        if (secondPlayerDone) {
+                            Log.i("Second player done with turn", "Second Player done...");
+                        } else {
+                            Thread.sleep(3000);
+                        }
+                    }
+
+                } catch( Exception e ) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+
+    public void addBlock( View view, int weight, int player){
         view.measure(View.MeasureSpec.EXACTLY, View.MeasureSpec.EXACTLY);
 
         if(stackState == stackStates.standing ){
