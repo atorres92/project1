@@ -1,5 +1,9 @@
 package edu.msu.comfortablynumb.project1;
 
+import java.io.IOException;
+
+import org.xmlpull.v1.XmlSerializer;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.os.Bundle;
@@ -103,6 +107,11 @@ public class BlockView extends View {
      */
     public void loadInstanceState(Bundle bundle) {
         game.loadInstanceState(bundle);
+    }
+
+
+    public void saveXml(String id, XmlSerializer xml) throws IOException{
+    	game.saveXml(id, xml);
     }
 
 }

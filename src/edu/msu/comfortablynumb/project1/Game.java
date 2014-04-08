@@ -6,7 +6,10 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.io.IOException;
 import java.util.ArrayList;
+
+import org.xmlpull.v1.XmlSerializer;
 
 public class Game {
 
@@ -393,6 +396,19 @@ public class Game {
         scores[PLAYER_TWO] = playerTwoScore;
         bundle.putIntArray(SCORES, scores);
         bundle.putSerializable( TOUCHSTATE, touchState );
+    }
+
+
+    public void saveXml(String id, XmlSerializer xml) throws IOException{
+        xml.startTag(null, "lastbrick");
+
+        xml.attribute(null, "weight", Float.toString(topBlock.getWeight())  );
+        xml.attribute(null, "x", Float.toString(topBlock.getX()));
+        xml.attribute(null, "y", Float.toString(topBlock.getY()));
+        xml.attribute(null, "height", Float.toString(topBlock.getHeight()));
+
+        xml.endTag(null,  "lastbrick");
+
     }
 
     /**
