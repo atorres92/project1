@@ -1,14 +1,21 @@
 package edu.msu.comfortablynumb.project1;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Bundle;
+import android.util.Log;
+import android.util.Xml;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
 
 public class Game {
@@ -249,6 +256,7 @@ public class Game {
 				view.invalidate();
 				}
 				return true;
+
 			}
 			else if (touchState == touchStates.vertical){
 				lastLastRelY = lastRelY;
@@ -292,6 +300,8 @@ public class Game {
 
 			     }
 			}
+
+			saveToCloud(BlockView.getGameActivity().getPlayerName());
 
 		}
 		else if (touchState == touchStates.vertical)
@@ -368,6 +378,30 @@ public class Game {
 		topBlock = null;
 		fallingStartTime =0;
 		stackState = stackStates.standing;
+	}
+
+	public void saveToCloud(String username){
+
+		final String  user = username;
+        // Create a thread to create a new login
+        new Thread(new Runnable() {
+
+            /**
+             * Save the hatting in the background
+             */
+            @Override
+            public void run() {
+                Cloud cloud = new Cloud();
+                boolean ok = cloud.saveToCloud(user, blockView);
+
+                if(!ok) {
+                	Log.i("Saving", "Saving Error");
+
+                }
+
+            }
+
+        }).start();
 	}
 
     /**

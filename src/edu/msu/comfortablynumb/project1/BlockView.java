@@ -33,9 +33,9 @@ public class BlockView extends View {
 		this.game = game;
 	}
 
-	private GameActivity gameActivity;
+	private static GameActivity gameActivity;
 
-    public GameActivity getGameActivity() {
+    public static GameActivity getGameActivity() {
         return gameActivity;
     }
 
