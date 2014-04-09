@@ -111,6 +111,8 @@ public class Game {
 	 */
 	private float offset;
 
+    private volatile boolean doneSavingBrick = false;
+
     /**
      * The name of the bundle keys to save the Game
      */
@@ -168,57 +170,65 @@ public class Game {
             public void run() {
                 try {
                     while(!gameOver) {
-                        boolean secondPlayerDone = false; //true when second player is done taking their turn.
+                        if( doneSavingBrick ) {
+                            boolean secondPlayerDone = false; //true when second player is done taking their turn.
 
-                        //SERVER CODE HERE:
-                        //
-                        Log.i("Polling Server...", "Polling Server...");
+                            //SERVER CODE HERE:
+                            //
+                            Log.i("Polling Server...", "Polling Server...");
 
-                        Cloud cloud = new Cloud();
-                        InputStream stream = cloud.pollGame(gameActivity.getPlayerName());
-                        // Test for an error
-                        boolean fail = stream == null;
+                            Cloud cloud = new Cloud();
+                            InputStream stream = cloud.pollGame(gameActivity.getPlayerName());
+                            // Test for an error
+                            boolean fail = stream == null;
 
-                        if(!fail) {
-                            try {
-                                XmlPullParser xml = Xml.newPullParser();
-                                xml.setInput(stream, "UTF-8");
-
-                                xml.nextTag();      // Advance to first tag
-                                xml.require(XmlPullParser.START_TAG, null, "brick");
-                                String status = xml.getAttributeValue(null, "status");
-
-                                if(status.equalsIgnoreCase("yes")){
-                                    secondPlayerDone = true;
-
-                                    int weight = Integer.parseInt(xml.getAttributeValue(null, "weight"));
-                                    float x = Float.parseFloat(xml.getAttributeValue(null, "x"));
-                                    float y = Float.parseFloat(xml.getAttributeValue(null, "y"));
-                                    int height = Integer.parseInt(xml.getAttributeValue(null, "height"));
-
-                                    Log.i("second player placed a brick.", "second player placed a brick");
-                                }
-
-
-                            } catch(IOException ex) {
-                                fail = true;
-                            } catch(XmlPullParserException ex) {
-                                Log.i("ex:", ex.getMessage());
-                                fail = true;
-                            } finally {
+                            if(!fail) {
                                 try {
-                                    stream.close();
+                                    XmlPullParser xml = Xml.newPullParser();
+                                    xml.setInput(stream, "UTF-8");
+
+                                    xml.nextTag();      // Advance to first tag
+                                    xml.require(XmlPullParser.START_TAG, null, "brick");
+                                    String status = xml.getAttributeValue(null, "status");
+                                    if(status.equals("yes")) {
+                                        while(xml.nextTag() == XmlPullParser.START_TAG) {
+                                            if(xml.getName().equals("lastbrick")) {
+                                                int weight = Integer.parseInt(xml.getAttributeValue(null, "weight"));
+                                                float x = Float.parseFloat(xml.getAttributeValue(null, "x"));
+                                                float y = Float.parseFloat(xml.getAttributeValue(null, "y"));
+                                                int height = Integer.parseInt(xml.getAttributeValue(null, "height"));
+                                                Log.i("weight: ", "" + weight);
+                                                Log.i("x: ", ""+x);
+                                                Log.i("y: ", ""+y);
+                                                Log.i("height: ", ""+height);
+                                                Log.i("second player placed a brick.", "second player placed a brick");
+
+                                            }
+                                        }
+                                        secondPlayerDone = true;
+                                    }
+
                                 } catch(IOException ex) {
-                                    Log.i("Message",ex.getMessage());
+                                    fail = true;
+                                } catch(XmlPullParserException ex) {
+                                    Log.i("ex:", ex.getMessage());
+                                    fail = true;
+                                } finally {
+                                    try {
+                                        stream.close();
+                                    } catch(IOException ex) {
+                                        Log.i("Message",ex.getMessage());
+                                    }
                                 }
                             }
-                        }
 
 
-                        if (secondPlayerDone) {
-                            Log.i("Second player done with turn", "Second Player done...");
-                        } else {
-                            Thread.sleep(3000);
+                            if (secondPlayerDone) {
+                                doneSavingBrick = false;
+                                Log.i("Second player done with turn", "Second Player done...");
+                            } else {
+                                Thread.sleep(3000);
+                            }
                         }
                     }
 
@@ -369,7 +379,8 @@ public class Game {
 			     }
 			}
 
-			saveToCloud(BlockView.getGameActivity().getPlayerName());
+			saveBrickToCloud(BlockView.getGameActivity().getPlayerName());
+            waitForOtherPlayer();
 
 		}
 		else if (touchState == touchStates.vertical)
@@ -448,7 +459,7 @@ public class Game {
 		stackState = stackStates.standing;
 	}
 
-	public void saveToCloud(String username){
+	public void saveBrickToCloud(String username){
 
 		final String  user = username;
         // Create a thread to create a new login
@@ -465,6 +476,8 @@ public class Game {
                 if(!ok) {
                 	Log.i("Saving", "Saving Error");
 
+                } else {
+                    doneSavingBrick = true;
                 }
 
             }
