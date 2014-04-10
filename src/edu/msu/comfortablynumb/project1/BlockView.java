@@ -89,7 +89,7 @@ public class BlockView extends View {
 
 	public void forwardOnWeightSelected(int weight){
         if(game.isMyTurn()) {
-            game.addBlock(this, weight, turn);
+            game.addBlock(this, weight, gameActivity.getMyPlayerName());
             if(turn==1)
                 setTurn(0);
             else

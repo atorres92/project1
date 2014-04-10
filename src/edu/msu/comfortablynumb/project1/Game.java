@@ -74,6 +74,9 @@ public class Game {
 	 */
 	private float centerCanvas;
 
+    //width of canvas
+    private float widthCanvas;
+
     /**
      * Context of game
      */
@@ -236,7 +239,7 @@ public class Game {
                                         while(xml.nextTag() == XmlPullParser.START_TAG) {
                                             if(xml.getName().equals("last_brick")) {
                                                 final int weight = Integer.parseInt(xml.getAttributeValue(null, "weight"));
-                                                final float x = Float.parseFloat(xml.getAttributeValue(null, "x"));
+                                                final float x = Float.parseFloat(xml.getAttributeValue(null, "x")) * widthCanvas;
                                                 final float y = Float.parseFloat(xml.getAttributeValue(null, "y"));
                                                 final int height = Integer.parseInt(xml.getAttributeValue(null, "height"));
 
@@ -287,6 +290,7 @@ public class Game {
 
 
     public void addBlock( View view, int weight, String player){
+        Log.i("String player to add block: %s", player);
         view.measure(View.MeasureSpec.EXACTLY, View.MeasureSpec.EXACTLY);
 
         if(stackState == stackStates.standing ){
@@ -311,6 +315,7 @@ public class Game {
 	public void draw(Canvas canvas){
         int wid = canvas.getWidth();
         centerCanvas = ( (float) wid / 2f );
+        widthCanvas = canvas.getWidth();
 
 		canvas.save();
 
@@ -567,7 +572,7 @@ public class Game {
     }
 
     public void callBlock(int weight, int height, float x, float y){
-        addBlock(blockView, weight, secondPlayer);
+        addBlock(blockView, weight, otherPlayerName);
         BlockPiece piece = blocks.get(blocks.size()-1);
         piece.setX(x);
         piece.setY(y);
@@ -579,7 +584,7 @@ public class Game {
         xml.startTag(null, "lastbrick");
 
         xml.attribute(null, "weight", Float.toString(topBlock.getWeight())  );
-        xml.attribute(null, "x", Float.toString(topBlock.getX()));
+        xml.attribute(null, "x", Float.toString(topBlock.getX() / widthCanvas));
         xml.attribute(null, "y", Float.toString(topBlock.getY()));
         xml.attribute(null, "height", Float.toString(topBlock.getHeight()));
 
