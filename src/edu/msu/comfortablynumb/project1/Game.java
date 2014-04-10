@@ -294,11 +294,11 @@ public class Game {
 			touchState = touchStates.horizontal;
 
 			//draws the block a certain color depending on the player
-			if(player ==1){
-			blocks.add(new BlockPiece(gameContext, R.drawable.brick_red1, numBlocks, centerCanvas, weight));
+			if(firstPlayer.equalsIgnoreCase(myPlayerName) && isMyTurn()){
+			blocks.add(new BlockPiece(gameContext, R.drawable.brick_blue, numBlocks, centerCanvas, weight));
 			}
 			else{
-			blocks.add(new BlockPiece(gameContext, R.drawable.brick_blue, numBlocks, centerCanvas, weight));
+			blocks.add(new BlockPiece(gameContext, R.drawable.brick_red1, numBlocks, centerCanvas, weight));
 			}
 			numBlocks+=1;
 			topBlock = blocks.get(numBlocks-1);
@@ -426,6 +426,7 @@ public class Game {
 			}
 
 			saveBrickToCloud(BlockView.getGameActivity().getMyPlayerName());
+            secondPlayerDone = false;
             waitForOtherPlayer();
 
 		}
