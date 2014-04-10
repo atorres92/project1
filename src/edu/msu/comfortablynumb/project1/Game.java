@@ -430,9 +430,11 @@ public class Game {
 			     }
 			}
 
-			saveBrickToCloud(BlockView.getGameActivity().getMyPlayerName());
-            secondPlayerDone = false;
-            waitForOtherPlayer();
+            if ( x == -1 ) {
+                saveBrickToCloud(BlockView.getGameActivity().getMyPlayerName());
+                secondPlayerDone = false;
+                waitForOtherPlayer();
+            }
 
 		}
 		else if (touchState == touchStates.vertical)
@@ -576,6 +578,7 @@ public class Game {
         BlockPiece piece = blocks.get(blocks.size()-1);
         piece.setX(x);
         piece.setY(y);
+        onReleased(blockView, -1, 0);
 
     }
 
