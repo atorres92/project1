@@ -151,8 +151,8 @@ public class GameActivity extends Activity {
         super.onSaveInstanceState(bundle);
 
         String [] names = new String[Game.PLAYERS];
-        names[Game.PLAYER_ONE] = playerName;
-        names[Game.PLAYER_TWO] = secondPlayerName;
+        names[Game.PLAYER_ONE] = firstPlayer;
+        names[Game.PLAYER_TWO] = secondPlayer;
         bundle.putStringArray(NAMES, names);
 
         blockView.saveInstanceState(bundle);
@@ -165,8 +165,8 @@ public class GameActivity extends Activity {
     public void loadInstanceState(Bundle bundle) {
         String [] names = bundle.getStringArray(NAMES);
         if ( names != null ) {
-            playerName = names[Game.PLAYER_ONE];
-            secondPlayerName = names[Game.PLAYER_TWO];
+            firstPlayer = names[Game.PLAYER_ONE];
+            secondPlayer = names[Game.PLAYER_TWO];
             blockView.loadInstanceState(bundle);
         }
     }

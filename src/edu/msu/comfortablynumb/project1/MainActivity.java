@@ -195,28 +195,6 @@ public class MainActivity extends Activity {
         startActivity(intent);
     }
 
-    /*
-	public void onStartGame(View view) {
-        if ( playerOneText.getText() != null && playerTwoText.getText() != null && getApplicationContext() != null ) {
-            if (playerOneText.getText().toString().matches("") || playerTwoText.getText().toString().matches("")) {
-                Toast.makeText(getApplicationContext(), ENTER_PLAYER_NAME,
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                String playerOneName = playerOneText.getText().toString();
-                String playerTwoName = playerTwoText.getText().toString();
-
-                Intent intent = new Intent(this, GameActivity.class);
-
-                intent.putExtra(PLAYER_NAME, playerOneName);
-                intent.putExtra(SECOND_PLAYER_NAME, playerTwoName);
-
-                startActivity(intent);
-                finish();
-            }
-        }
-	}
-	*/
-
     /**
      * Save the names to a bundle
      * @param bundle The bundle we save to
