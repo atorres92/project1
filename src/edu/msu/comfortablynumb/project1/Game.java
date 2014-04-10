@@ -175,7 +175,7 @@ public class Game {
 
                             //SERVER CODE HERE:
                             //
-                            Log.i("Polling Server...", "Polling Server...");
+
 
                             Cloud cloud = new Cloud();
                             InputStream stream = cloud.pollGame(gameActivity.getPlayerName());
@@ -190,18 +190,16 @@ public class Game {
                                     xml.nextTag();      // Advance to first tag
                                     xml.require(XmlPullParser.START_TAG, null, "brick");
                                     String status = xml.getAttributeValue(null, "status");
+                                    Log.i("Polling Server...", "Polling Server with status: " + status);
                                     if(status.equals("yes")) {
                                         while(xml.nextTag() == XmlPullParser.START_TAG) {
-                                            if(xml.getName().equals("lastbrick")) {
+                                            if(xml.getName().equals("last_brick")) {
                                                 int weight = Integer.parseInt(xml.getAttributeValue(null, "weight"));
                                                 float x = Float.parseFloat(xml.getAttributeValue(null, "x"));
                                                 float y = Float.parseFloat(xml.getAttributeValue(null, "y"));
                                                 int height = Integer.parseInt(xml.getAttributeValue(null, "height"));
-                                                Log.i("weight: ", "" + weight);
-                                                Log.i("x: ", ""+x);
-                                                Log.i("y: ", ""+y);
-                                                Log.i("height: ", ""+height);
-                                                Log.i("second player placed a brick.", "second player placed a brick");
+                                                callBlock(weight, height, x, y);
+
 
                                             }
                                         }
@@ -511,6 +509,14 @@ public class Game {
         scores[PLAYER_TWO] = playerTwoScore;
         bundle.putIntArray(SCORES, scores);
         bundle.putSerializable( TOUCHSTATE, touchState );
+    }
+
+    public void callBlock(int weight, int height, float x, float y){
+        addBlock(blockView, weight, 2);
+        BlockPiece piece = blocks.get(blocks.size()-1);
+        piece.setX(x);
+        piece.setY(y);
+
     }
 
 
