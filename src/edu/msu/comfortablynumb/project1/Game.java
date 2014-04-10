@@ -171,6 +171,7 @@ public class Game {
 
     public void checkFirstTurn() {
         if ( firstPlayer.equalsIgnoreCase(otherPlayerName)) {
+            doneSavingBrick = true;
             waitForOtherPlayer();
         }
 
@@ -180,7 +181,26 @@ public class Game {
         Log.i("Game.java: You: %s", myPlayerName);
         Log.i("Game.java: Other person: %s", otherPlayerName);
 
+        Log.i("Game.java: Is it my turn? : %s", Boolean.toString(isMyTurn()));
 
+
+    }
+
+    public boolean isMyTurn() {
+        if (firstPlayer.equalsIgnoreCase(myPlayerName)) {
+            if(blockView.getTurn() == 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            if(blockView.getTurn() == 0) {
+                return false;
+            } else {
+                return true;
+            }
+
+        }
     }
 
     public void waitForOtherPlayer() {
@@ -191,6 +211,7 @@ public class Game {
                 try {
                     while(!secondPlayerDone) {
                         if( doneSavingBrick ) {
+                            Log.i("Game.java: Is it my turn? : %s", Boolean.toString(isMyTurn()));
 
                             //SERVER CODE HERE:
                             //
