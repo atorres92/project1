@@ -7,6 +7,7 @@ import android.util.Log;
 import android.util.Xml;
 import android.view.MotionEvent;
 import android.view.View;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
@@ -170,6 +171,7 @@ public class Game {
         gameActivity = blockView.getGameActivity();
         turningBlock = -1;
         fallingStartTime = 0;
+        Log.i("Current Turn: %s", String.valueOf(blockView.getTurn()));
     }
 
     public void checkFirstTurn() {
@@ -430,10 +432,12 @@ public class Game {
 			     }
 			}
 
-            if ( x == -1 ) {
+            if ( x != -1 ) {
                 saveBrickToCloud(BlockView.getGameActivity().getMyPlayerName());
                 secondPlayerDone = false;
-                waitForOtherPlayer();
+                if((stackState == stackStates.fallingLeft || stackState == stackStates.fallingLeft) && firstPlayer.equalsIgnoreCase(myPlayerName)){
+                	waitForOtherPlayer();
+                }
             }
 
 		}
@@ -490,6 +494,7 @@ public class Game {
 	}
 
 	public void restartGame() {
+
         //Turn 1 = Player One's turn
         //Turn 0 = Player Two's turn
         //
@@ -497,8 +502,10 @@ public class Game {
         //
 		if(blockView.getTurn() == 1) {
             playerTwoScore += 1;
+            Log.i("Restart game", "1");
         } else {
 			playerOneScore += 1;
+			Log.i("Restart game", "0");
         }
 
         updateScore();
@@ -509,9 +516,13 @@ public class Game {
             gameActivity.onEndGame(blockView, MainActivity.SECOND_PLAYER_NAME);
         }
 
+		if(!firstPlayer.equalsIgnoreCase(myPlayerName))
+			waitForOtherPlayer();
+
 		blocks.clear();
         offset=0;
         blockView.setTurn(0);
+
 
 		numBlocks = 0;
 		topBlock = null;
