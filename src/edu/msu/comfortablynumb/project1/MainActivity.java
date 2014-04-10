@@ -36,6 +36,7 @@ public class MainActivity extends Activity {
 
 	public static final String USERNAME = "USERNAME";
     public static final String USER_ID = "USER_ID";
+    public static final String FIRST_PLAYER = "FIRST_PLAYER";
 	static final String PASSWORD = "PASSWORD";
     static final String REMEMBER = "REMEMBER";
     static final String FILL_INFO = "Please fill out the forms";

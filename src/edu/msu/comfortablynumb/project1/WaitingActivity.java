@@ -23,6 +23,7 @@ public class WaitingActivity extends Activity {
     private String username;
     private String secondPlayerId;
     private String secondPlayerUsername;
+    private boolean isFirstPlayer = false;
 
     private volatile boolean stopThread = false;
 
@@ -113,6 +114,7 @@ public class WaitingActivity extends Activity {
 
                         Cloud cloud = new Cloud();
                         InputStream stream = cloud.pollWaiting(username, id);
+
                         // Test for an error
                         boolean fail = stream == null;
 
@@ -128,6 +130,15 @@ public class WaitingActivity extends Activity {
                                 if(id != null) {
                                 	Log.i("ID", "" + secondPlayerId);
                                 }
+
+                                if ( xml.getAttributeValue(null, "firstplayer").equalsIgnoreCase(id) ){
+                                    isFirstPlayer = true;
+                                    Log.i("You're the first player!", "You're the first player");
+                                } else {
+                                    Log.i("You're the SECOND player!", "You're the SECOND player");
+                                    isFirstPlayer = false;
+                                }
+
                                 secondPlayerUsername = xml.getAttributeValue(null, "secondplayername");
 
                                 if(status.equalsIgnoreCase("yes")){
@@ -163,6 +174,11 @@ public class WaitingActivity extends Activity {
                             intent.putExtra(MainActivity.USER_ID, id);
                             intent.putExtra(MainActivity.USERNAME_2, secondPlayerUsername);
                             intent.putExtra(MainActivity.USER_ID_2, secondPlayerId);
+                            if ( isFirstPlayer) {
+                                intent.putExtra(MainActivity.FIRST_PLAYER, username );
+                            } else {
+                                intent.putExtra(MainActivity.FIRST_PLAYER, secondPlayerUsername);
+                            }
                             startActivity(intent);
                             finish();
 
