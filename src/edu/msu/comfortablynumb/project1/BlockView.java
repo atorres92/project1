@@ -47,6 +47,8 @@ public class BlockView extends View {
         game.setSecondPlayer(gameActivity.getSecondPlayer());
         game.setMyPlayerName(gameActivity.getMyPlayerName());
         game.setOtherPlayerName(gameActivity.getOtherPlayerName());
+
+        game.checkFirstTurn();
     }
 
 	public BlockView(Context context) {

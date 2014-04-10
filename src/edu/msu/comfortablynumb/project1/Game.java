@@ -167,16 +167,18 @@ public class Game {
         gameActivity = blockView.getGameActivity();
         turningBlock = -1;
         fallingStartTime = 0;
+    }
+
+    public void checkFirstTurn() {
+        if ( firstPlayer.equalsIgnoreCase(otherPlayerName)) {
+            waitForOtherPlayer();
+        }
 
         Log.i("Game.java: First Player: %s", firstPlayer);
         Log.i("Game.java: Second Player: %s", secondPlayer);
 
         Log.i("Game.java: You: %s", myPlayerName);
         Log.i("Game.java: Other person: %s", otherPlayerName);
-
-        if ( firstPlayer.equalsIgnoreCase(otherPlayerName)) {
-            waitForOtherPlayer();
-        }
 
 
     }
