@@ -1,15 +1,14 @@
 package edu.msu.comfortablynumb.project1;
 
-import java.io.IOException;
-
-import org.xmlpull.v1.XmlSerializer;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import org.xmlpull.v1.XmlSerializer;
+
+import java.io.IOException;
 
 public class BlockView extends View {
 
@@ -42,6 +41,12 @@ public class BlockView extends View {
     public void setGameActivity(GameActivity activity) {
         gameActivity = activity;
         game.setGameActivity(gameActivity);
+
+        //Set all the names
+        game.setFirstPlayer(gameActivity.getFirstPlayer());
+        game.setSecondPlayer(gameActivity.getSecondPlayer());
+        game.setMyPlayerName(gameActivity.getMyPlayerName());
+        game.setOtherPlayerName(gameActivity.getOtherPlayerName());
     }
 
 	public BlockView(Context context) {

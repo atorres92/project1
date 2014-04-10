@@ -15,11 +15,11 @@ public class GameActivity extends Activity {
 
 	private BlockView blockView;
 
-	private TextView playerScoreView;
-    private TextView secondPlayerScoreView;
+	private TextView myScoreTextView;
+    private TextView otherPlayerScoreTextView;
 
-    private String playerName;
-    private String secondPlayerName;
+    private String myPlayerName;
+    private String otherPlayerName;
 
     private String firstPlayer;
     private String secondPlayer;
@@ -43,14 +43,14 @@ public class GameActivity extends Activity {
 
         // Grab player names and scores
         Intent intent = this.getIntent();
-        setPlayerName(intent.getStringExtra(MainActivity.USERNAME));
-        setSecondPlayerName(intent.getStringExtra(MainActivity.USERNAME_2));
+        setMyPlayerName(intent.getStringExtra(MainActivity.USERNAME));
+        setOtherPlayerName(intent.getStringExtra(MainActivity.USERNAME_2));
         firstPlayer = intent.getStringExtra(MainActivity.FIRST_PLAYER);
         secondPlayer = intent.getStringExtra(MainActivity.SECOND_PLAYER);
 
         //Set two player name text views
-        setPlayerScoreView((TextView) this.findViewById(R.id.playerOneScore));
-        setSecondPlayerScoreView((TextView) this.findViewById(R.id.playerTwoScore));
+        setMyScoreTextView((TextView) this.findViewById(R.id.playerOneScore));
+        setOtherPlayerScoreTextView((TextView) this.findViewById(R.id.playerTwoScore));
 
         //send activity to blockView so it can grab player names and scores
         blockView.setGameActivity(this);
@@ -123,11 +123,11 @@ public class GameActivity extends Activity {
  		Intent intent = new Intent(this, ScoreActivity.class);
 
         if ( winner == MainActivity.PLAYER_NAME) {
-            intent.putExtra(WINNER, playerScoreView.getText().toString());
-            intent.putExtra(LOSER, secondPlayerScoreView.getText().toString());
+            intent.putExtra(WINNER, myScoreTextView.getText().toString());
+            intent.putExtra(LOSER, otherPlayerScoreTextView.getText().toString());
         } else {
-            intent.putExtra(WINNER, secondPlayerScoreView.getText().toString());
-            intent.putExtra(LOSER, playerScoreView.getText().toString());
+            intent.putExtra(WINNER, otherPlayerScoreTextView.getText().toString());
+            intent.putExtra(LOSER, myScoreTextView.getText().toString());
         }
 
 		startActivity(intent);
@@ -171,34 +171,34 @@ public class GameActivity extends Activity {
         }
     }
 
-    public TextView getPlayerScoreView() { return playerScoreView; }
+    public TextView getMyScoreTextView() { return myScoreTextView; }
 
-    public void setPlayerScoreView(TextView playerScoreView) {
-        this.playerScoreView = playerScoreView;
+    public void setMyScoreTextView(TextView myScoreTextView) {
+        this.myScoreTextView = myScoreTextView;
     }
 
-    public TextView getSecondPlayerScoreView() {
-        return secondPlayerScoreView;
+    public TextView getOtherPlayerScoreTextView() {
+        return otherPlayerScoreTextView;
     }
 
-    public void setSecondPlayerScoreView(TextView secondPlayerScoreView) {
-        this.secondPlayerScoreView = secondPlayerScoreView;
+    public void setOtherPlayerScoreTextView(TextView otherPlayerScoreTextView) {
+        this.otherPlayerScoreTextView = otherPlayerScoreTextView;
     }
 
-    public String getPlayerName() {
-        return playerName;
+    public String getMyPlayerName() {
+        return myPlayerName;
     }
 
-    public void setPlayerName(String playerName) {
-        this.playerName = playerName;
+    public void setMyPlayerName(String myPlayerName) {
+        this.myPlayerName = myPlayerName;
     }
 
-    public String getSecondPlayerName() {
-        return secondPlayerName;
+    public String getOtherPlayerName() {
+        return otherPlayerName;
     }
 
-    public void setSecondPlayerName(String secondPlayerName) {
-        this.secondPlayerName = secondPlayerName;
+    public void setOtherPlayerName(String otherPlayerName) {
+        this.otherPlayerName = otherPlayerName;
     }
 
     public String getSecondPlayer() {

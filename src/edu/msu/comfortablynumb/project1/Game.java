@@ -3,7 +3,6 @@ package edu.msu.comfortablynumb.project1;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.util.Xml;
 import android.view.MotionEvent;
@@ -116,9 +115,10 @@ public class Game {
 
     private volatile boolean doneSavingBrick = false;
 
-    private Handler addBlockHandler;
-
-    private Runnable addBlockRunnable;
+    private String firstPlayer;
+    private String secondPlayer;
+    private String myPlayerName;
+    private String otherPlayerName;
 
     /**
      * The name of the bundle keys to save the Game
@@ -149,8 +149,8 @@ public class Game {
 
     public void updateScore() {
         if (gameActivity != null) {
-            gameActivity.getPlayerScoreView().setText(gameActivity.getFirstPlayer() + ":" + playerOneScore);
-            gameActivity.getSecondPlayerScoreView().setText(gameActivity.getSecondPlayer() + ":" + playerTwoScore);
+            gameActivity.getMyScoreTextView().setText(gameActivity.getFirstPlayer() + ":" + playerOneScore);
+            gameActivity.getOtherPlayerScoreTextView().setText(gameActivity.getSecondPlayer() + ":" + playerTwoScore);
         }
     }
 
@@ -168,26 +168,18 @@ public class Game {
         turningBlock = -1;
         fallingStartTime = 0;
 
-        if ( gameActivity.getFirstPlayer().equalsIgnoreCase(gameActivity.getSecondPlayerName())) {
+        Log.i("Game.java: First Player: %s", gameActivity.getFirstPlayer());
+        Log.i("Game.java: Second Player: %s", gameActivity.getSecondPlayer());
+
+        Log.i("Game.java: You: %s", gameActivity.getMyPlayerName());
+        Log.i("Game.java: Other person: %s", gameActivity.getOtherPlayerName());
+
+        if ( gameActivity.getFirstPlayer().equalsIgnoreCase(gameActivity.getOtherPlayerName())) {
             waitForOtherPlayer();
         }
-        addBlockHandler = new Handler();
-        addBlockRunnable = new Runnable() {
-            public float x;
-            public float y;
-            public int height;
-            public int weight;
 
-            public void run() {
-                callBlock( weight, height, x, y);
-            }
 
-            public void setX( float x) {
-                this.x = x;
-            }
-        };
-
-	}
+    }
 
     public void waitForOtherPlayer() {
         //Wait for other player to place their brick
@@ -203,7 +195,7 @@ public class Game {
 
 
                             Cloud cloud = new Cloud();
-                            InputStream stream = cloud.pollGame(gameActivity.getPlayerName());
+                            InputStream stream = cloud.pollGame(gameActivity.getMyPlayerName());
                             // Test for an error
                             boolean fail = stream == null;
 
@@ -407,7 +399,7 @@ public class Game {
 			     }
 			}
 
-			saveBrickToCloud(BlockView.getGameActivity().getPlayerName());
+			saveBrickToCloud(BlockView.getGameActivity().getMyPlayerName());
             waitForOtherPlayer();
 
 		}
@@ -610,4 +602,37 @@ public class Game {
         updateScore();
 
     }
+
+    public String getOtherPlayerName() {
+        return otherPlayerName;
+    }
+
+    public void setOtherPlayerName(String otherPlayerName) {
+        this.otherPlayerName = otherPlayerName;
+    }
+
+    public String getFirstPlayer() {
+        return firstPlayer;
+    }
+
+    public void setFirstPlayer(String firstPlayer) {
+        this.firstPlayer = firstPlayer;
+    }
+
+    public String getSecondPlayer() {
+        return secondPlayer;
+    }
+
+    public void setSecondPlayer(String secondPlayer) {
+        this.secondPlayer = secondPlayer;
+    }
+
+    public String getMyPlayerName() {
+        return myPlayerName;
+    }
+
+    public void setMyPlayerName(String myPlayerName) {
+        this.myPlayerName = myPlayerName;
+    }
+
 }
