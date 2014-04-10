@@ -88,12 +88,13 @@ public class BlockView extends View {
 	}
 
 	public void forwardOnWeightSelected(int weight){
-
-		game.addBlock(this, weight, turn);
-		if(turn==1)
-			setTurn(0);
-		else
-			setTurn(1);
+        if(game.isMyTurn()) {
+            game.addBlock(this, weight, turn);
+            if(turn==1)
+                setTurn(0);
+            else
+                setTurn(1);
+        }
 	}
 
     public void updateTurn( int currentTurn ) {

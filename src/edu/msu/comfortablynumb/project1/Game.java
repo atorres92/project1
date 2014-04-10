@@ -171,7 +171,8 @@ public class Game {
 
     public void checkFirstTurn() {
         if ( firstPlayer.equalsIgnoreCase(otherPlayerName)) {
-            doneSavingBrick = true;
+            Log.i("I go second.  Waiting for other player to place brick.", "I go second");
+            //doneSavingBrick = true;
             waitForOtherPlayer();
         }
 
