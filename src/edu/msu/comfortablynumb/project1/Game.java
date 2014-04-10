@@ -167,6 +167,10 @@ public class Game {
         gameActivity = blockView.getGameActivity();
         turningBlock = -1;
         fallingStartTime = 0;
+
+        if ( gameActivity.getFirstPlayer().equalsIgnoreCase(gameActivity.getSecondPlayerName())) {
+            waitForOtherPlayer();
+        }
         addBlockHandler = new Handler();
         addBlockRunnable = new Runnable() {
             public float x;
