@@ -286,7 +286,7 @@ public class Game {
     }
 
 
-    public void addBlock( View view, int weight, int player){
+    public void addBlock( View view, int weight, String player){
         view.measure(View.MeasureSpec.EXACTLY, View.MeasureSpec.EXACTLY);
 
         if(stackState == stackStates.standing ){
@@ -294,10 +294,10 @@ public class Game {
 			touchState = touchStates.horizontal;
 
 			//draws the block a certain color depending on the player
-			if(firstPlayer.equalsIgnoreCase(myPlayerName) && isMyTurn()){
+			if(firstPlayer.equalsIgnoreCase(player)){
 			blocks.add(new BlockPiece(gameContext, R.drawable.brick_blue, numBlocks, centerCanvas, weight));
 			}
-			else{
+			else if (secondPlayer.equalsIgnoreCase(player)){
 			blocks.add(new BlockPiece(gameContext, R.drawable.brick_red1, numBlocks, centerCanvas, weight));
 			}
 			numBlocks+=1;
@@ -567,7 +567,7 @@ public class Game {
     }
 
     public void callBlock(int weight, int height, float x, float y){
-        addBlock(blockView, weight, 2);
+        addBlock(blockView, weight, secondPlayer);
         BlockPiece piece = blocks.get(blocks.size()-1);
         piece.setX(x);
         piece.setY(y);
@@ -604,9 +604,9 @@ public class Game {
             for(int i=0; i<ids.length; i++) {
                 // Since we're starting with empty array of blocks, loop through ids and create corresponding block
                 if( ids[i] == R.drawable.brick_red1 ) {
-                    addBlock(blockView, weights[i], 1);
+                    addBlock(blockView, weights[i], myPlayerName);
                 } else if ( ids[i] == R.drawable.brick_blue ) {
-                    addBlock(blockView, weights[i], 2);
+                    addBlock(blockView, weights[i], myPlayerName);
                 }
             }
         } else {
