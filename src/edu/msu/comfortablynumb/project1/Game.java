@@ -3,6 +3,7 @@ package edu.msu.comfortablynumb.project1;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.util.Xml;
 import android.view.MotionEvent;
@@ -101,7 +102,9 @@ public class Game {
     //If a brick falls, stop polling server to see if second player placed a brick
     private volatile boolean gameOver = false;
 
-	/**
+    private volatile boolean secondPlayerDone = false; //true when second player is done taking their turn.
+
+    /**
 	 * last of last relY
 	 */
 	private float lastLastRelY;
@@ -112,6 +115,10 @@ public class Game {
 	private float offset;
 
     private volatile boolean doneSavingBrick = false;
+
+    private Handler addBlockHandler;
+
+    private Runnable addBlockRunnable;
 
     /**
      * The name of the bundle keys to save the Game
@@ -142,8 +149,8 @@ public class Game {
 
     public void updateScore() {
         if (gameActivity != null) {
-            gameActivity.getPlayerScoreView().setText(gameActivity.getPlayerName() + ":" + playerOneScore);
-            gameActivity.getSecondPlayerScoreView().setText(gameActivity.getSecondPlayerName() + ":" + playerTwoScore);
+            gameActivity.getPlayerScoreView().setText(gameActivity.getFirstPlayer() + ":" + playerOneScore);
+            gameActivity.getSecondPlayerScoreView().setText(gameActivity.getSecondPlayer() + ":" + playerTwoScore);
         }
     }
 
@@ -160,6 +167,21 @@ public class Game {
         gameActivity = blockView.getGameActivity();
         turningBlock = -1;
         fallingStartTime = 0;
+        addBlockHandler = new Handler();
+        addBlockRunnable = new Runnable() {
+            public float x;
+            public float y;
+            public int height;
+            public int weight;
+
+            public void run() {
+                callBlock( weight, height, x, y);
+            }
+
+            public void setX( float x) {
+                this.x = x;
+            }
+        };
 
 	}
 
@@ -169,9 +191,8 @@ public class Game {
             @Override
             public void run() {
                 try {
-                    while(!gameOver) {
+                    while(!secondPlayerDone) {
                         if( doneSavingBrick ) {
-                            boolean secondPlayerDone = false; //true when second player is done taking their turn.
 
                             //SERVER CODE HERE:
                             //
@@ -194,16 +215,21 @@ public class Game {
                                     if(status.equals("yes")) {
                                         while(xml.nextTag() == XmlPullParser.START_TAG) {
                                             if(xml.getName().equals("last_brick")) {
-                                                int weight = Integer.parseInt(xml.getAttributeValue(null, "weight"));
-                                                float x = Float.parseFloat(xml.getAttributeValue(null, "x"));
-                                                float y = Float.parseFloat(xml.getAttributeValue(null, "y"));
-                                                int height = Integer.parseInt(xml.getAttributeValue(null, "height"));
-                                                callBlock(weight, height, x, y);
+                                                final int weight = Integer.parseInt(xml.getAttributeValue(null, "weight"));
+                                                final float x = Float.parseFloat(xml.getAttributeValue(null, "x"));
+                                                final float y = Float.parseFloat(xml.getAttributeValue(null, "y"));
+                                                final int height = Integer.parseInt(xml.getAttributeValue(null, "height"));
 
+                                                blockView.getGameActivity().runOnUiThread( new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        callBlock(weight, height, x, y);
+                                                    }
+                                                });
 
+                                                secondPlayerDone = true;
                                             }
                                         }
-                                        secondPlayerDone = true;
                                     }
 
                                 } catch(IOException ex) {
@@ -434,10 +460,16 @@ public class Game {
 	}
 
 	public void restartGame() {
-		if(blockView.getTurn() == 1)
-			playerTwoScore += 1;
-		else
+        //Turn 1 = Player One's turn
+        //Turn 0 = Player Two's turn
+        //
+        //If block falls while turn == 1 then player two gets a point...
+        //
+		if(blockView.getTurn() == 1) {
+            playerTwoScore += 1;
+        } else {
 			playerOneScore += 1;
+        }
 
         updateScore();
 		//Someone wins when they get 3 points

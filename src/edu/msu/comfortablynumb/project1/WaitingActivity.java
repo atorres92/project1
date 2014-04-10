@@ -126,23 +126,25 @@ public class WaitingActivity extends Activity {
                                 xml.nextTag();      // Advance to first tag
                                 xml.require(XmlPullParser.START_TAG, null, "brick");
                                 String status = xml.getAttributeValue(null, "status");
-                                secondPlayerId = xml.getAttributeValue(null, "secondplayerid");
-                                if(id != null) {
-                                	Log.i("ID", "" + secondPlayerId);
-                                }
-
-                                if ( xml.getAttributeValue(null, "firstplayer").equalsIgnoreCase(id) ){
-                                    isFirstPlayer = true;
-                                    Log.i("You're the first player!", "You're the first player");
-                                } else {
-                                    Log.i("You're the SECOND player!", "You're the SECOND player");
-                                    isFirstPlayer = false;
-                                }
-
-                                secondPlayerUsername = xml.getAttributeValue(null, "secondplayername");
 
                                 if(status.equalsIgnoreCase("yes")){
                                 	secondPlayerConnected = true;
+
+                                    secondPlayerId = xml.getAttributeValue(null, "secondplayerid");
+                                    if(id != null) {
+                                        Log.i("ID", "" + secondPlayerId);
+                                    }
+
+                                    secondPlayerUsername = xml.getAttributeValue(null, "secondplayername");
+
+                                    if ( xml.getAttributeValue(null, "firstplayer").equalsIgnoreCase(id) ){
+                                        isFirstPlayer = true;
+                                        Log.i("You're the first player!", "You're the first player");
+                                    } else {
+                                        Log.i("You're the SECOND player!", "You're the SECOND player");
+                                        isFirstPlayer = false;
+                                    }
+
                                     Log.i("Second player found! Username: %s", secondPlayerUsername);
                                     Log.i("UserId of second player: %s", secondPlayerId);
                                 }
@@ -176,8 +178,10 @@ public class WaitingActivity extends Activity {
                             intent.putExtra(MainActivity.USER_ID_2, secondPlayerId);
                             if ( isFirstPlayer) {
                                 intent.putExtra(MainActivity.FIRST_PLAYER, username );
+                                intent.putExtra(MainActivity.SECOND_PLAYER, secondPlayerUsername );
                             } else {
                                 intent.putExtra(MainActivity.FIRST_PLAYER, secondPlayerUsername);
+                                intent.putExtra(MainActivity.SECOND_PLAYER, username);
                             }
                             startActivity(intent);
                             finish();

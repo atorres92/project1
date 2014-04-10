@@ -21,6 +21,9 @@ public class GameActivity extends Activity {
     private String playerName;
     private String secondPlayerName;
 
+    private String firstPlayer;
+    private String secondPlayer;
+
     public static final String NAMES = "GameActivity.names";
     public static final String WINNER = "GameActivity.winner";
     public static final String LOSER = "GameActivity.loser";
@@ -42,6 +45,10 @@ public class GameActivity extends Activity {
         Intent intent = this.getIntent();
         setPlayerName(intent.getStringExtra(MainActivity.USERNAME));
         setSecondPlayerName(intent.getStringExtra(MainActivity.USERNAME_2));
+        firstPlayer = intent.getStringExtra(MainActivity.FIRST_PLAYER);
+        secondPlayer = intent.getStringExtra(MainActivity.SECOND_PLAYER);
+
+        //Set two player name text views
         setPlayerScoreView((TextView) this.findViewById(R.id.playerOneScore));
         setSecondPlayerScoreView((TextView) this.findViewById(R.id.playerTwoScore));
 
@@ -193,4 +200,21 @@ public class GameActivity extends Activity {
     public void setSecondPlayerName(String secondPlayerName) {
         this.secondPlayerName = secondPlayerName;
     }
+
+    public String getSecondPlayer() {
+        return secondPlayer;
+    }
+
+    public void setSecondPlayer(String secondPlayer) {
+        this.secondPlayer = secondPlayer;
+    }
+
+    public String getFirstPlayer() {
+        return firstPlayer;
+    }
+
+    public void setFirstPlayer(String firstPlayer) {
+        this.firstPlayer = firstPlayer;
+    }
+
 }
