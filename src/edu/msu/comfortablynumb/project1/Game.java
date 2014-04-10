@@ -102,8 +102,6 @@ public class Game {
 	 */
 	private stackStates stackState;
 
-    //If a brick falls, stop polling server to see if second player placed a brick
-    private volatile boolean gameOver = false;
 
     private volatile boolean secondPlayerDone = false; //true when second player is done taking their turn.
 
@@ -116,8 +114,6 @@ public class Game {
 	 * saves the offset of the canvas used for vertical scrolling
 	 */
 	private float offset;
-
-    private volatile boolean doneSavingBrick = false;
 
     private String firstPlayer;
     private String secondPlayer;
@@ -274,7 +270,6 @@ public class Game {
 
 
                             if (secondPlayerDone) {
-                                doneSavingBrick = false;
                                 Log.i("Second player done with turn", "Second Player done...");
                             } else {
                                 Log.i("Game.java: waitForSecondPlayer() Sleeping...", "Sleeping...");
@@ -433,11 +428,10 @@ public class Game {
 			}
 
             if ( x != -1 ) {
-                saveBrickToCloud(BlockView.getGameActivity().getMyPlayerName());
+                saveBrickToCloud(blockView.getGameActivity().getMyPlayerName());
                 secondPlayerDone = false;
-                if((stackState == stackStates.fallingLeft || stackState == stackStates.fallingLeft) && firstPlayer.equalsIgnoreCase(myPlayerName)){
-                	waitForOtherPlayer();
-                }
+                waitForOtherPlayer();
+
             }
 
 		}
@@ -516,8 +510,6 @@ public class Game {
             gameActivity.onEndGame(blockView, MainActivity.SECOND_PLAYER_NAME);
         }
 
-		if(!firstPlayer.equalsIgnoreCase(myPlayerName))
-			waitForOtherPlayer();
 
 		blocks.clear();
         offset=0;
@@ -548,7 +540,6 @@ public class Game {
                 	Log.i("Saving", "Saving Error");
 
                 } else {
-                    doneSavingBrick = true;
                 }
 
             }
