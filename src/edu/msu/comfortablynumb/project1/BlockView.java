@@ -101,6 +101,14 @@ public class BlockView extends View {
         turn = currentTurn;
     }
 
+    public void nextTurn() {
+        if( turn == 0 ) {
+            turn = 1;
+        } else {
+            turn = 0;
+        }
+    }
+
     /**
      * Save the Game to a bundle
      * @param bundle The bundle we save to

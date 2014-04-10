@@ -211,7 +211,7 @@ public class Game {
             public void run() {
                 try {
                     while(!secondPlayerDone) {
-                        if( doneSavingBrick ) {
+                        if( true ) {
                             Log.i("Game.java: Is it my turn? : %s", Boolean.toString(isMyTurn()));
 
                             //SERVER CODE HERE:
@@ -248,6 +248,7 @@ public class Game {
                                                 });
 
                                                 secondPlayerDone = true;
+                                                blockView.nextTurn();
                                             }
                                         }
                                     }
@@ -271,6 +272,7 @@ public class Game {
                                 doneSavingBrick = false;
                                 Log.i("Second player done with turn", "Second Player done...");
                             } else {
+                                Log.i("Game.java: waitForSecondPlayer() Sleeping...", "Sleeping...");
                                 Thread.sleep(3000);
                             }
                         }
